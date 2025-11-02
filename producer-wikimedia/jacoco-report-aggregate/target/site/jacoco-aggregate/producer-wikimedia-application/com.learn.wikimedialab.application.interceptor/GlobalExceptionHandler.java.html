@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">jacoco-report-aggregate</a> &gt; <a href="../index.html" class="el_bundle">producer-wikimedia-application</a> &gt; <a href="index.source.html" class="el_package">com.learn.wikimedialab.application.interceptor</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.learn.wikimedialab.application.interceptor;
+
+import com.learn.wikimedialab.domain.exceptions.base.BaseWikimediaLabException;
+import com.learn.wikimedialab.domain.exceptions.base.NotFoundWikimediaLabException;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+/**
+ * Global exception handler for handling Wikimedia Lab domain exceptions.
+ */
+@RestControllerAdvice
+<span class="nc" id="L16">public class GlobalExceptionHandler {</span>
+
+  /**
+   * Handles BaseWikimediaLabException and returns an appropriate error response.
+   *
+   * @param ex the BaseWikimediaLabException to handle
+   * @return a ResponseEntity containing the error response map and HTTP status
+   */
+  @ExceptionHandler(BaseWikimediaLabException.class)
+  public ResponseEntity&lt;Map&lt;String, String&gt;&gt; handleVisitsException(BaseWikimediaLabException ex) {
+<span class="nc" id="L26">    return this.buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+  }
+
+  /**
+   * Handles NotFoundWikimediaLabException and returns an appropriate error response.
+   *
+   * @param ex the NotFoundWikimediaLabException to handle
+   * @return a ResponseEntity containing the error response map and HTTP status
+   */
+  @ExceptionHandler(NotFoundWikimediaLabException.class)
+  public ResponseEntity&lt;Map&lt;String, String&gt;&gt; handleVisitsException(
+      NotFoundWikimediaLabException ex) {
+<span class="nc" id="L38">    return this.buildErrorResponse(ex, HttpStatus.NOT_FOUND);</span>
+  }
+
+  /**
+   * Builds a ResponseEntity containing the error response map and the specified HTTP status.
+   *
+   * @param ex     the BaseWikimediaLabException containing error details
+   * @param status the HTTP status to be set in the response
+   * @return a ResponseEntity with the error response map and HTTP status
+   */
+  private ResponseEntity&lt;Map&lt;String, String&gt;&gt; buildErrorResponse(BaseWikimediaLabException ex,
+      HttpStatus status) {
+<span class="nc" id="L50">    final Map&lt;String, String&gt; errorResponse = this.generateErrorResponse(ex.getCode(),</span>
+<span class="nc" id="L51">        ex.getDescription());</span>
+<span class="nc" id="L52">    return ResponseEntity.status(status).body(errorResponse);</span>
+  }
+
+  /**
+   * Generates an error response map containing the provided error code and message.
+   *
+   * @param errorCode    the code representing the error
+   * @param errorMessage the message describing the error
+   * @return a map with keys &quot;errorCode&quot; and &quot;errorMessage&quot; containing the respective values
+   */
+  private Map&lt;String, String&gt; generateErrorResponse(String errorCode, String errorMessage) {
+<span class="nc" id="L63">    final Map&lt;String, String&gt; errorResponse = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L64">    errorResponse.put(&quot;errorCode&quot;, errorCode);</span>
+<span class="nc" id="L65">    errorResponse.put(&quot;errorMessage&quot;, errorMessage);</span>
+<span class="nc" id="L66">    return errorResponse;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
