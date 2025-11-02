@@ -1,0 +1,136 @@
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Full name of the user
+          minLength: 2
+          maxLength: 100
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          description: Email address of the user
+          maxLength: 255
+          example: "john.doe@example.com"
+        age:
+          type: integer
+          description: Age of the user
+          minimum: 18
+          maximum: 120
+          example: 30
+        phoneNumber:
+          type: string
+          description: Phone number of the user
+          minLength: 10
+          maxLength: 20
+          example: "+1234567890"
+      required:
+        - name
+        - email
+        - age
+    
+    CreateUserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the user
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          description: Full name of the user
+          minLength: 2
+          maxLength: 100
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          description: Email address of the user
+          maxLength: 255
+          example: "john.doe@example.com"
+        age:
+          type: integer
+          description: Age of the user
+          minimum: 18
+          maximum: 120
+          example: 30
+        phoneNumber:
+          type: string
+          description: Phone number of the user
+          minLength: 10
+          maxLength: 20
+          example: "+1234567890"
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was created
+          example: "2024-01-15T10:30:00Z"
+        isActive:
+          type: boolean
+          description: Whether the user account is active
+          example: true
+      required:
+        - id
+        - name
+        - email
+        - age
+        - createdAt
+        - isActive
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the user
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        name:
+          type: string
+          description: Full name of the user
+          minLength: 2
+          maxLength: 100
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          description: Email address of the user
+          maxLength: 255
+          example: "john.doe@example.com"
+        age:
+          type: integer
+          description: Age of the user
+          minimum: 18
+          maximum: 120
+          example: 30
+        phoneNumber:
+          type: string
+          description: Phone number of the user
+          minLength: 10
+          maxLength: 20
+          example: "+1234567890"
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was created
+          example: "2024-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was last updated
+          example: "2024-01-16T14:45:30Z"
+        isActive:
+          type: boolean
+          description: Whether the user account is active
+          example: true
+      required:
+        - id
+        - name
+        - email
+        - age
+        - createdAt
+        - isActive
