@@ -18,13 +18,12 @@
 	<description>Hexagonal template for Spring Boot projects</description>
 
 	<modules>
-		<module>api-rest</module>
 		<module>application</module>
 		<module>boot</module>
 		<module>domain</module>
 		<module>infrastructure</module>
 		<module>jacoco-report-aggregate</module>
-	</modules>
+  </modules>
 
 	<properties>
 		<java.version>21</java.version>
