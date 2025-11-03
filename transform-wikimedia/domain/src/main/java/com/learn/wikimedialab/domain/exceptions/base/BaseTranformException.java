@@ -1,12 +1,14 @@
 package com.learn.wikimedialab.domain.exceptions.base;
 
 import com.learn.wikimedialab.domain.values.ErrorCode;
+import java.io.Serial;
 import lombok.Getter;
 
-import java.io.Serial;
-
+/**
+ * Base exception class for transformation-related errors.
+ */
 @Getter
-public class BaseTemplateException extends RuntimeException {
+public class BaseTranformException extends RuntimeException {
 
   @Serial
   private static final long serialVersionUID = -1602454289558545967L;
@@ -15,7 +17,12 @@ public class BaseTemplateException extends RuntimeException {
 
   private final String description;
 
-  public BaseTemplateException(ErrorCode errorCode) {
+  /**
+   * Constructs a new BaseTranformException with the specified error code.
+   *
+   * @param errorCode the error code
+   */
+  public BaseTranformException(ErrorCode errorCode) {
     this.code = String.valueOf(errorCode.getCode());
     this.description = errorCode.getMessage();
   }

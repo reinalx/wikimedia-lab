@@ -1,15 +1,17 @@
 package com.learn.wikimedialab.domain.services;
 
+import com.learn.wikimedialab.domain.events.WikimediaEvent;
+
 /**
  * Service interface for processing Wikimedia events.
  */
 public interface WikimediaProcessorService {
 
   /**
-   * Processes a raw Wikimedia event.
+   * Processes a Wikimedia event.
    *
-   * @param rawEvent the raw event data as a String
+   * @param wikimediaEvent the Wikimedia event to process
    */
-  void processEvent(String rawEvent);
+  void processEvent(WikimediaEvent wikimediaEvent);
 
 }
