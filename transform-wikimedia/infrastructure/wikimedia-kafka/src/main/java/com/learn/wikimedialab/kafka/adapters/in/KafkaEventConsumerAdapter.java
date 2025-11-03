@@ -2,7 +2,7 @@ package com.learn.wikimedialab.kafka.adapters.in;
 
 import com.learn.wikimedialab.domain.adapters.EventConsumerAdapter;
 import com.learn.wikimedialab.domain.services.WikimediaProcessorService;
-import com.learn.wikimedialab.kafka.mappers.KafkaEventConsumerMapper;
+import com.learn.wikimedialab.kafka.mappers.JsonToObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,7 +19,7 @@ public class KafkaEventConsumerAdapter implements EventConsumerAdapter {
 
   private final WikimediaProcessorService wikimediaProcessorService;
 
-  private final KafkaEventConsumerMapper kafkaEventConsumerMapper;
+  private final JsonToObjectMapper mapper;
 
   /**
    * Consumes an event from Kafka and processes it.
@@ -35,7 +35,7 @@ public class KafkaEventConsumerAdapter implements EventConsumerAdapter {
     log.info("Received event: {}", event);
     try {
       this.wikimediaProcessorService.processEvent(
-          this.kafkaEventConsumerMapper.toWikimediaEvent(event)
+          this.mapper.convertJsonStringToEvent(event)
       );
     } catch (final Exception e) {
       log.error("Error processing event: {}", e.getMessage());

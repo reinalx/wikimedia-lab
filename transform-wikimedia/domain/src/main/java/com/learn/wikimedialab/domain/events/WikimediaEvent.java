@@ -10,6 +10,9 @@ public record WikimediaEvent(
     String id,
     String type,
     String user,
+    String title,
+    String titleUrl,
+    String comment,
     boolean bot,
     MetaInfo meta
 ) {
