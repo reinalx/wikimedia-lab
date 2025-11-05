@@ -1,0 +1,41 @@
+openapi: 3.0.3
+
+info:
+  title: Products
+  description: Provides endpoints that allow users to manage the different products within the system
+  contact:
+    name: Proactive Devs team
+    email: proactivedevs@gmail.com
+    url: 'http://proactivedevs.com'
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:8080/smartopswsc
+    description: Localhost
+  - url: https://proactivedevs-template-des/smartopswsc
+    description: DES
+  - url: https://proactivedevs-template-pre/smartopswsc
+    description: PRE
+  - url: https://proactivedevs-template-prod/smartopswsc
+    description: PRO
+
+tags:
+  - name: Products
+    description: Operations about Products management
+
+security:
+  - itxBasicAuth: []
+  - itxBearerAuth: []
+paths:
+  /v1/products:
+    $ref: 'v1/services/products/products.yml'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
