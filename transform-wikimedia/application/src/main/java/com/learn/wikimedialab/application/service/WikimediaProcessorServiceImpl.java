@@ -2,7 +2,6 @@ package com.learn.wikimedialab.application.service;
 
 import static com.learn.wikimedialab.domain.utils.Constants.SPANISH_WIKIPEDIA_DOMAIN;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learn.wikimedialab.domain.adapters.EventPublisherAdapter;
 import com.learn.wikimedialab.domain.events.WikimediaEvent;
 import com.learn.wikimedialab.domain.services.WikimediaProcessorService;
@@ -19,8 +18,6 @@ import org.springframework.stereotype.Service;
 public class WikimediaProcessorServiceImpl implements WikimediaProcessorService {
 
   private final EventPublisherAdapter eventPublisherAdapter;
-  private final ObjectMapper mapper = new ObjectMapper();
-
 
   /**
    * Processes a Wikimedia event.

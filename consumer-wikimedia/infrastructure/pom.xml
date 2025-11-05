@@ -11,6 +11,11 @@
     <name>infrastructure</name>
     <packaging>pom</packaging>
 
+  <modules>
+    <module>wikimedia-kafka</module>
+    <module>wikimedia-mongodb</module>
+  </modules>
+
     <repositories>
         <repository>
             <id>central</id>

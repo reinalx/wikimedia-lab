@@ -48,6 +48,16 @@
             <artifactId>consumer-wikimedia-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>wikimedia-kafka</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>wikimedia-mongodb</artifactId>
+          <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,0 +1,34 @@
+openapi: 3.0.3
+
+info:
+  title: Wikimedia Events Api
+  description:
+  contact:
+    name: Andrés Reinaldo Cid
+    email: andresrc345@gmail.com
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:8080
+    description: Localhost
+
+tags:
+  - name: Wikimedia
+    description: Operations about Wikimedia Events
+
+security:
+  - basicAuth: []
+  - bearerAuth: []
+paths:
+  /v1/products:
+    $ref: 'v1/services/products/products.yml'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

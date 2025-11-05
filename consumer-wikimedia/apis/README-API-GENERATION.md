@@ -1,53 +1,64 @@
-e h# 🚀 Generación AUTOMÁTICA y ESCALABLE de APIs - Guía de Uso
+# 🚀 AUTOMATIC and SCALABLE API Generation - Usage Guide
 
-## 📋 Resumen
+## 📋 Overview
 
-Este proyecto está configurado para **generar automáticamente TODAS las APIs** que añadas en `apis/openapi/` **SIN NECESIDAD DE TOCAR EL POM.XML**. 
+This project is configured to **automatically generate ALL APIs** that you add under `apis/openapi/` — **without ever touching the `pom.xml`**.
 
-🎯 **Ventaja Clave**: Solo crea la carpeta con la especificación OpenAPI y Maven automáticamente detecta y genera la API.
+🎯 **Key Advantage:** Just create the folder with your OpenAPI specification, and Maven will automatically detect and generate the API for you.
 
-## 📁 Estructura de APIs
+---
+
+## 📁 API Structure
+
+
 
 ```
 apis/openapi/
-├── products/           # ✅ API de productos (activa)
+├── products/           # ✅ Products API (active)
 │   ├── metadata.yml
 │   ├── openapi-rest.yml
 │   └── v1/
-├── users/              # ✅ API de usuarios (activa)  
+├── users/              # ✅ Users API (active)  
 │   ├── metadata.yml
 │   ├── openapi-rest.yml
 │   └── v1/
-└── orders/             # 🔮 Futura API (será detectada automáticamente)
+└── orders/             # 🔮 Future API (auto-detectable)
     ├── metadata.yml
     ├── openapi-rest.yml
     └── v1/
 ```
 
-## ✅ APIs Configuradas Actualmente
+
+---
+
+## ✅ Currently Configured APIs
 
 ### 🔸 Products API
-- **Input**: `apis/openapi/products/openapi-rest.yml`
-- **Output**: `api-rest/target/generated-sources/openapi-products/`
-- **Package API**: `com.proactivedevs.template.apirest.products.api`
-- **Package Models**: `com.proactivedevs.template.apirest.products.model`
+- **Input:** `apis/openapi/products/openapi-rest.yml`
+- **Output:** `api-rest/target/generated-sources/openapi-products/`
+- **API Package:** `com.proactivedevs.template.apirest.products.api`
+- **Models Package:** `com.proactivedevs.template.apirest.products.model`
 
 ### 🔸 Users API
-- **Input**: `apis/openapi/users/openapi-rest.yml`
-- **Output**: `api-rest/target/generated-sources/openapi-users/`
-- **Package API**: `com.proactivedevs.template.apirest.users.api`
-- **Package Models**: `com.proactivedevs.template.apirest.users.model`
+- **Input:** `apis/openapi/users/openapi-rest.yml`
+- **Output:** `api-rest/target/generated-sources/openapi-users/`
+- **API Package:** `com.proactivedevs.template.apirest.users.api`
+- **Models Package:** `com.proactivedevs.template.apirest.users.model`
 
-## 🚀 Cómo Añadir una Nueva API (SUPER SIMPLE)
+---
 
-Para añadir una nueva API (por ejemplo, `orders`), **¡solo necesitas 2 pasos!**:
+## 🚀 How to Add a New API (SUPER EASY)
 
-### 1️⃣ Crear la Estructura de la API
+To add a new API (for example, `orders`), you only need **2 steps**!
+
+### 1️⃣ Create the API Folder Structure
+
+
 
 ```
 apis/openapi/orders/
 ├── metadata.yml
-├── openapi-rest.yml    # 🎯 Este archivo es la clave - DEBE existir
+├── openapi-rest.yml    # 🎯 This is the key file – it MUST exist
 ├── README.md
 └── v1/
     ├── components/
@@ -60,69 +71,53 @@ apis/openapi/orders/
             └── orders.yml
 ```
 
-### 2️⃣ Ejecutar Maven
+### 2️⃣ Run Maven
 
 ```bash
 mvn clean generate-sources
 ```
 
-**¡YA ESTÁ! 🎉** La API se detecta automáticamente y se genera sin tocar el `pom.xml`.
 
-## 🔮 APIs Preparadas para Detección Automática
+### 3️⃣ Create the Controller
 
-El sistema ya está preparado para detectar automáticamente estas APIs comunes:
-
-- ✅ **products** - Gestión de productos
-- ✅ **users** - Gestión de usuarios
-- 🔮 **orders** - Gestión de pedidos
-- 🔮 **payments** - Gestión de pagos
-- 🔮 **inventory** - Gestión de inventario
-- 🔮 **notifications** - Sistema de notificaciones
-- 🔮 **reports** - Generación de reportes
-- 🔮 **analytics** - Analíticas y métricas
-- 🔮 **auth** - Autenticación y autorización
-- 🔮 **admin** - Panel de administración
-
-### 3️⃣ Crear el Controlador
-
-Crea el controlador que implemente la interfaz generada:
+Then, create a controller that implements the generated interface:
 
 ```java
 @RestController
 @RequestMapping("/api/v1")
 public class OrdersController implements OrdersApi {
-    
-    // Los métodos se autocompletan desde la interfaz generada
+
+    // Methods will auto-complete from the generated interface
     
 }
 ```
 
-## 🔧 Comandos Útiles
+## 🔧 Useful Commands
 
-### Limpiar y Regenerar Todo
+### Clean and Regenerate Everything
 ```bash
 mvn clean generate-sources
 ```
 
-### Solo Compilar
+### Compile Only
 ```bash
 mvn compile
 ```
 
-### Ver las Clases Generadas
+### Compile Only
 ```bash
 find api-rest/target/generated-sources -name "*.java" -type f
 ```
 
-## 📊 Ubicaciones de Archivos Generados
+## 📊 Generated Files Location
 
 - **Products**: `api-rest/target/generated-sources/openapi-products/src/main/java/com/proactivedevs/template/apirest/products/`
 - **Users**: `api-rest/target/generated-sources/openapi-users/src/main/java/com/proactivedevs/template/apirest/users/`
 - **Future APIs**: `api-rest/target/generated-sources/openapi-{api-name}/src/main/java/com/proactivedevs/template/apirest/{api-name}/`
 
-## 🎯 Patrón de Naming
+## 🎯 Naming Conventions
 
-### Directorios
+### Directories
 - **Input**: `apis/openapi/{api-name}/openapi-rest.yml`
 - **Output**: `openapi-{api-name}`
 
@@ -135,18 +130,21 @@ find api-rest/target/generated-sources -name "*.java" -type f
 
 ## ⚠️ Notas Importantes
 
-1. **Consistencia**: Mantén la misma estructura para todas las APIs
-2. **Naming**: Usa nombres en plural para las APIs (products, users, orders)
-3. **Packages**: Sigue el patrón de packages establecido
-4. **Versionado**: Mantén la estructura v1/ para futuras versiones
-5. **Validación**: Todas las APIs usan validación Jakarta Bean Validation
+- **Consistency:** Maintain the same structure for all APIs.
 
-## 🚀 Estado Actual
+- **Naming:** Always use plural names (e.g., `products`, `users`, `orders`).
 
-✅ **Products API** - Completamente configurada y funcional  
-✅ **Users API** - Completamente configurada y funcional  
-🔄 **Future APIs** - Listas para ser añadidas siguiendo este patrón
+- **Packages:** Follow the defined package pattern.
 
+- **Versioning:** Keep the `v1/` structure for future versions.
+
+- **Validation:** All APIs support Jakarta Bean Validation.
+
+## 🚀 Current Status
+
+✅ **Products API** – Fully configured and functional  
+✅ **Users API** – Fully configured and functional  
+🔄 **Future APIs** – Ready to be added following this pattern
 ---
 
 **Última actualización**: 25 de octubre de 2025
