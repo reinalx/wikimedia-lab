@@ -1,18 +1,19 @@
 get:
   tags:
-    - Products
-  summary: Retrieves a list products
-  description: Retrieves a list of products available in the system
-  operationId: getProducts
+    - Wikimedia
+  summary: Retrieves a list of wikimedia events
+  description: Retrieves a list of wikimedia events from Wikimedia EventStreams
+  operationId: getWikimediaEvents
   parameters:
-    - $ref: '../../components/products/components.yml#/components/parameters/GetProductsRequestProductName'
+    - $ref: '../../components/wikimedia/components.yml#/components/parameters/GetWikimediaEventsRequestPage'
+    - $ref: '../../components/wikimedia/components.yml#/components/parameters/GetWikimediaEventsRequestSize'
   responses:
     "200":
       description: Ok
       content:
         application/json:
           schema:
-            $ref: "../../components/products/components.yml#/components/schemas/GetProductsResponse"
+            $ref: "../../components/wikimedia/components.yml#/components/schemas/GetWikimediaEventsResponse"
     '400':
       $ref: '../../components/errors/components.yml#/components/responses/BadRequest'
     '401':

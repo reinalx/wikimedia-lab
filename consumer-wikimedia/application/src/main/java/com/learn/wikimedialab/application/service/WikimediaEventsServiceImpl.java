@@ -3,6 +3,7 @@ package com.learn.wikimedialab.application.service;
 import com.learn.wikimedialab.domain.adapters.WikimediaEventsAdapter;
 import com.learn.wikimedialab.domain.events.WikimediaEvent;
 import com.learn.wikimedialab.domain.services.WikimediaEventsService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,19 @@ public class WikimediaEventsServiceImpl implements WikimediaEventsService {
     this.wikimediaEventsAdapter.saveFilteredEvent(event);
 
     log.info("Event saved to database: {}", event);
+  }
+
+  /**
+   * Retrieves a list of Wikimedia events with pagination.
+   *
+   * @param page The page number.
+   * @param size The number of events per page.
+   * @return A list of Wikimedia events.
+   */
+  @Override
+  public List<WikimediaEvent> getWikimediaEvents(int page, int size) {
+    log.info("Retrieving Wikimedia events - Page: {}, Size: {}", page, size);
+    return this.wikimediaEventsAdapter.getWikimediaEvents(page, size);
   }
 
 }

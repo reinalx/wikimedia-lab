@@ -1,0 +1,68 @@
+components:
+  schemas:
+    GetWikimediaEventsResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          description: List of wikimedia events
+          items:
+            $ref: '#/components/schemas/WikimediaEvent'
+    WikimediaEvent:
+      type: object
+      description: A wikimedia event
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the event
+          example: "1234567890"
+        type:
+          type: string
+          description: The type of the event
+          example: "edit"
+        title:
+          type: string
+          description: The title of the page that was edited
+          example: "Main Page"
+        titleUrl:
+          type: string
+          description: The URL of the page that was edited
+          example: "https://en.wikipedia.org/wiki/Main_Page"
+        uri:
+          type: string
+          description: The URI of the event
+          example: "https://en.wikipedia.org/wiki/Special:RecentChanges"
+        user:
+          type: string
+          description: The user who made the edit
+          example: "ExampleUser"
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp of when the event occurred
+          example: "2024-06-01T12:34:56Z"
+      required:
+        - id
+  parameters:
+    GetWikimediaEventsRequestPage:
+      name: page
+      in: query
+      description: The page number to retrieve
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 9999
+        default: 1
+        example: 2
+    GetWikimediaEventsRequestSize:
+        name: size
+        in: query
+        description: The number of items per page
+        required: false
+        schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+            example: 20

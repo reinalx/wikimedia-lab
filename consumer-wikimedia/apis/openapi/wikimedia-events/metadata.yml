@@ -1,23 +1,14 @@
-# Metadata for the Products API
+# Metadata for the  Wikimedia Events API
 api:
-  name: Products API
+  name: Wikimedia Events API
   version: 0.0.1
   description: >
-    This API allows managing and retrieving product information within the system.
-    It serves as an example template for API structure and OpenAPI generation.
+    This API allows managing and retrieving wikimedia event information within the system.
   maintainer:
-    name: Team Products
-    email: team-products@example.com
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
+    name: Andrés Reinaldo Cid
+    email: andres@example.com
   tags:
-    - products
-    - example
-    - template
-  basePath: /api/products
-  contact:
-    name: Product API Support
-    email: support-products@example.com
+    - Wikimedia
+  basePath: /wikimedia-events
   documentation:
     url: ./README.md

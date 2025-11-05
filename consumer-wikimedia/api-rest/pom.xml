@@ -94,15 +94,16 @@
                 <version>7.1.0</version>
                 <executions>
                     <execution>
-                        <id>generate-products-api</id>
-                        <goals>
+                        <id>generate-wikimedia-api</id>
+                      <phase>generate-sources</phase>
+                      <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/../apis/openapi/products/openapi-rest.yml</inputSpec>
+                            <inputSpec>${project.basedir}/../apis/openapi/wikimedia-events/openapi-rest.yml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>com.learn.wikimedialab.apigenerator.openapi.api.products</apiPackage>
-                            <modelPackage>com.learn.wikimedialab.apigenerator.openapi.api.products.model</modelPackage>
+                            <apiPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia</apiPackage>
+                            <modelPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.model</modelPackage>
                             <modelNameSuffix>DTO</modelNameSuffix>
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
@@ -110,27 +111,6 @@
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <useLombok>true</useLombok>
                                 <lombokBuilder>true</lombokBuilder>
-                                <useSpringBoot3>true</useSpringBoot3>
-                                <openApiNullable>false</openApiNullable>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate-users-api</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/../apis/openapi/users/openapi-rest.yml</inputSpec>
-                            <generatorName>spring</generatorName>
-                            <apiPackage>com.learn.wikimedialab.apigenerator.openapi.api.users</apiPackage>
-                            <modelPackage>com.learn.wikimedialab.apigenerator.openapi.api.users.model</modelPackage>
-                            <configOptions>
-                                <interfaceOnly>true</interfaceOnly>
-                                <useTags>true</useTags>
-                                <skipDefaultInterface>true</skipDefaultInterface>
-                                <modelNameSuffix>DTO</modelNameSuffix>
-                                <useLombok>true</useLombok>
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <openApiNullable>false</openApiNullable>
                             </configOptions>
@@ -177,6 +157,26 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/annotations</source>
+                                <source>${project.build.directory}/generated-sources/openapi/src/main/java</source>
+                            </sources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

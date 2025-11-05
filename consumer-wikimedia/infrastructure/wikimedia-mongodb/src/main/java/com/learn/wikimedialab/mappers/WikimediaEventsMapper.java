@@ -17,4 +17,12 @@ public interface WikimediaEventsMapper {
    * @return the mapped WikimediaEventEntity
    */
   WikimediaEventEntity toEntity(WikimediaEvent event);
+
+  /**
+   * Maps a WikimediaEventEntity to a WikimediaEvent.
+   *
+   * @param entity the WikimediaEventEntity to map
+   * @return the mapped WikimediaEvent
+   */
+  WikimediaEvent toDomain(WikimediaEventEntity entity);
 }

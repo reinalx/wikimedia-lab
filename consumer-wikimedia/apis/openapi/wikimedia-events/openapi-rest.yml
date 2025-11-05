@@ -15,20 +15,6 @@ servers:
 tags:
   - name: Wikimedia
     description: Operations about Wikimedia Events
-
-security:
-  - basicAuth: []
-  - bearerAuth: []
 paths:
-  /v1/products:
-    $ref: 'v1/services/products/products.yml'
-
-components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+  /v1/wikimedia-events:
+    $ref: 'v1/services/wikimedia/wikimedia-events.yml'

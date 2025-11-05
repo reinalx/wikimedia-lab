@@ -1,4 +1,4 @@
-# 🧩 Products API
+# 🧩 Wikimedia Events API
 
 ## Overview
 

@@ -28,7 +28,7 @@ public class KafkaEventConsumerAdapter implements EventConsumerAdapter {
    */
   @Override
   @KafkaListener(
-      topics = "${app.kafka.topics.raw}",
+      topics = "${app.kafka.topics.filtered}",
       groupId = "${spring.kafka.consumer.group-id}"
   )
   public void consumer(String event) {
