@@ -48,6 +48,11 @@
             <artifactId>kafka-output</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>wikimedia-webclient</artifactId>
+          <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

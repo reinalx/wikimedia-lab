@@ -26,6 +26,7 @@
 
   <modules>
         <module>kafka-output</module>
+        <module>wikimedia-webclient</module>
   </modules>
 
     <properties>
