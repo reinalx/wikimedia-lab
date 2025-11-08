@@ -24,10 +24,6 @@ components:
           type: string
           description: The title of the page that was edited
           example: "Main Page"
-        titleUrl:
-          type: string
-          description: The URL of the page that was edited
-          example: "https://en.wikipedia.org/wiki/Main_Page"
         uri:
           type: string
           description: The URI of the event
@@ -36,7 +32,7 @@ components:
           type: string
           description: The user who made the edit
           example: "ExampleUser"
-        timestamp:
+        createdAt:
           type: string
           format: date-time
           description: The timestamp of when the event occurred

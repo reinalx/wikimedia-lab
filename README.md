@@ -1,10 +1,10 @@
-# Wikimedia Stream Event Lab - Fase 1
+# Wikimedia Stream Event Lab - Phase 1
 
-🎯 **Sistema de procesamiento en tiempo real de eventos de Wikimedia**
+🎯 **Real-time Wikimedia event processing system**
 
-Este proyecto implementa un pipeline de procesamiento en tiempo real que consume el feed público de eventos de Wikimedia, aplica filtros y almacena los datos en MongoDB, exponiendo una API REST para consultas.
+This project implements a real-time processing pipeline that consumes the public Wikimedia event feed, applies filters, and stores data in MongoDB, exposing a REST API for querying.
 
-## 🏗️ Arquitectura
+## 🏗️ Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -22,139 +22,162 @@ Este proyecto implementa un pipeline de procesamiento en tiempo real que consume
                                               └───────────────┘
 ```
 
-## 📦 Componentes
+## 📦 Components
 
-### 🔄 Producer Wikimedia (Puerto 8081)
-- **Responsabilidad**: Consume el stream público de Wikimedia y publica eventos sin modificar
-- **Tópico destino**: `wikimedia.raw.events`
-- **Tecnología**: Spring Boot 3 + WebClient reactivo
+### 🔄 Producer Wikimedia (Port 8081)
+- **Responsibility**: Consumes public Wikimedia stream and publishes unmodified events
+- **Target Topic**: `wikimedia.raw.events`
+- **Technology**: Spring Boot 3 + Reactive WebClient
 
-### ⚙️ Transform Wikimedia (Puerto 8080)
-- **Responsabilidad**: Procesa eventos del tópico raw aplicando filtros de negocio
-- **Tópico origen**: `wikimedia.raw.events`
-- **Tópico destino**: `wikimedia.filtered.events`
-- **Filtros aplicados**: Solo ediciones en español, excluir bots, etc.
+### ⚙️ Transform Wikimedia (Port 8080)
+- **Responsibility**: Processes events from raw topic applying business filters
+- **Source Topic**: `wikimedia.raw.events`
+- **Target Topic**: `wikimedia.filtered.events`
+- **Applied Filters**: Only Spanish edits, exclude bots, etc.
 
-### 💾 Consumer Wikimedia (Puerto 8090)
-- **Responsabilidad**: Persiste eventos filtrados en MongoDB y expone API REST
-- **Tópico origen**: `wikimedia.filtered.events`
-- **Base de datos**: MongoDB
+### 💾 Consumer Wikimedia (Port 8090)
+- **Responsibility**: Persists filtered events to MongoDB and exposes REST API
+- **Source Topic**: `wikimedia.filtered.events`
+- **Database**: MongoDB
 - **API**: `/api/wikimedia-events/events`
 
-## 🚀 Inicio Rápido
+## 🚀 Quick Start
 
-### Prerrequisitos
-- Docker y Docker Compose
-- Java 21 (para desarrollo local)
-- Maven 3.9+ (para desarrollo local)
+### Prerequisites
+- Docker and Docker Compose
+- Java 21 (for local development)
+- Maven 3.9+ (for local development)
 
-### 🎯 Ejecutar todo el sistema
+### 🎯 Run the Complete System
 
 ```bash
-# Clonar el repositorio
+# Clone the repository
 git clone <repository-url>
 cd wikimedia-lab
 
-# IMPORTANTE para Mac con Apple Silicon (M1/M2/M3):
-# Limpiar imágenes problemáticas anteriores si las hay
-docker-compose down --rmi local
-docker system prune -f
+# Use the automated test script (recommended)
+./test-docker-pipeline.sh
 
-# Construir y ejecutar todos los servicios
-docker-compose up --build
-
-# Para ejecutar en segundo plano
-docker-compose up --build -d
+# Or manually:
+docker compose up --build
 ```
 
-#### 🍎 **Nota especial para Apple Silicon (M1/M2/M3)**
-Este proyecto está optimizado para funcionar en Mac con chips Apple Silicon. Si experimentas problemas de construcción, asegúrate de:
-- Usar Docker Desktop actualizado (versión 4.x+)
-- Tener suficiente memoria asignada a Docker (mínimo 4GB recomendado)
+### ⚡ Automated Pipeline Script
 
-### ⏱️ Tiempo de inicio esperado
-- **Infraestructura** (Kafka, MongoDB): ~30-45 segundos
-- **Servicios Java**: ~60-90 segundos adicionales
-- **Sistema completo**: ~2-3 minutos
+The `test-docker-pipeline.sh` script provides a complete solution:
 
-## 🔍 Verificar funcionamiento
-
-### 1. Verificar servicios están corriendo
 ```bash
-docker-compose ps
+# Make script executable (if needed)
+chmod +x test-docker-pipeline.sh
+
+# Run the complete pipeline
+./test-docker-pipeline.sh
 ```
 
-### 2. Verificar logs de cada servicio
+**What the script does:**
+1. 🧹 Cleans previous containers and volumes
+2. 🔄 Removes old project images to force complete rebuild
+3. 🔨 Builds and starts all services with health checks
+4. 📊 Shows available service endpoints
+
+#### 🍎 **Special Note for Apple Silicon (M1/M2/M3)**
+This project is optimized to work on Mac with Apple Silicon chips. The Dockerfiles use `amazoncorretto:21-alpine` images which are compatible with ARM64 architecture.
+
+### ⏱️ Expected Startup Time
+- **Infrastructure** (Kafka, MongoDB): ~30-45 seconds
+- **Java Services**: ~60-90 seconds additional
+- **Complete System**: ~2-3 minutes
+
+## 🔍 Verify Operation
+
+### 1. Check All Services Are Running
 ```bash
-# Producer (debería mostrar conexión al stream de Wikimedia)
-docker-compose logs producer-wikimedia
-
-# Transform (debería mostrar procesamiento de eventos)
-docker-compose logs transform-wikimedia
-
-# Consumer (debería mostrar persistencia en MongoDB)
-docker-compose logs consumer-wikimedia
+docker compose ps
 ```
 
-### 3. Verificar tópicos de Kafka
-Acceder a Kafka UI: http://localhost:8082
-- Deberías ver los tópicos: `wikimedia.raw.events` y `wikimedia.filtered.events`
-- Verificar que hay mensajes siendo procesados
-
-### 4. Verificar API REST
+### 2. Health Check Endpoints
 ```bash
-# Consultar eventos almacenados
-curl http://localhost:8090/api/wikimedia-events/events
+# Producer health
+curl http://localhost:8081/actuator/health
 
-# Health check del consumer
+# Transform health (fixed with web starter)
+curl http://localhost:8080/actuator/health
+
+# Consumer health
 curl http://localhost:8090/api/wikimedia-events/actuator/health
 ```
 
-### 5. Verificar MongoDB
+### 3. Check Service Logs
 ```bash
-# Conectar a MongoDB
+# Producer (should show Wikimedia stream connection)
+docker compose logs producer-wikimedia
+
+# Transform (should show event processing)
+docker compose logs transform-wikimedia
+
+# Consumer (should show MongoDB persistence)
+docker compose logs consumer-wikimedia
+```
+
+### 4. Verify Kafka Topics
+Access Kafka UI: http://localhost:8082
+- You should see topics: `wikimedia.raw.events` and `wikimedia.filtered.events`
+- Verify messages are being processed
+
+### 5. Verify REST API
+```bash
+# Query stored events
+curl http://localhost:8090/api/wikimedia-events/events
+
+# Check event count
+curl -s http://localhost:8090/api/wikimedia-events/events | jq '.data | length'
+```
+
+### 6. Verify MongoDB
+```bash
+# Connect to MongoDB
 docker exec -it mongodb mongosh -u root -p example --authenticationDatabase admin
 
-# En el shell de MongoDB
+# In MongoDB shell
 use wikimedia
 db.events.countDocuments()
 db.events.findOne()
 ```
 
-## 📊 Monitoreo y Debug
+## 📊 Monitoring and Debug
 
-### Puertos expuestos
-| Servicio | Puerto | Descripción |
-|----------|---------|-------------|
-| Producer Wikimedia | 8081 | Servicio productor |
-| Transform Wikimedia | 8080 | Servicio de transformación |
-| Consumer Wikimedia | 8090 | Servicio consumidor + API |
-| Kafka UI | 8082 | Interfaz web para Kafka |
-| MongoDB | 27017 | Base de datos |
-| Kafka | 9092 | Broker Kafka |
-| Zookeeper | 2181 | Coordinación Kafka |
+### Exposed Ports
+| Service | Port | Description |
+|---------|------|-------------|
+| Producer Wikimedia | 8081 | Producer service + health checks |
+| Transform Wikimedia | 8080 | Transform service + health checks |
+| Consumer Wikimedia | 8090 | Consumer service + REST API |
+| Kafka UI | 8082 | Web interface for Kafka |
+| MongoDB | 27017 | Database |
+| Kafka | 9092 | Kafka broker |
+| Zookeeper | 2181 | Kafka coordination |
 
-### URLs útiles
-- **API de eventos**: http://localhost:8090/api/wikimedia-events/events
+### Useful URLs
+- **Events API**: http://localhost:8090/api/wikimedia-events/events
 - **Kafka UI**: http://localhost:8082
-- **Health checks**:
+- **Health Checks**:
   - Producer: http://localhost:8081/actuator/health
   - Transform: http://localhost:8080/actuator/health
   - Consumer: http://localhost:8090/api/wikimedia-events/actuator/health
 
-## 🛠️ Desarrollo local
+## 🛠️ Local Development
 
-### Ejecutar servicios individualmente
+### Run Services Individually
 ```bash
-# Solo infraestructura
-docker-compose up -d zookeeper kafka mongodb kafka-init-topics
+# Infrastructure only
+docker compose up -d zookeeper kafka mongodb kafka-init-topics
 
-# Ejecutar un servicio Java localmente
+# Run a Java service locally
 cd producer-wikimedia
 mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-### Variables de entorno para desarrollo local
+### Environment Variables for Local Development
 ```bash
 # Producer
 export SPRING_KAFKA_BOOTSTRAP_SERVERS=localhost:9092
@@ -173,71 +196,131 @@ export APP_KAFKA_TOPICS_FILTERED=wikimedia.filtered.events
 
 ## 🧪 Testing
 
-### Verificar el flujo completo
-1. **Productor funcionando**: Logs muestran conexión a Wikimedia stream
-2. **Mensajes en raw topic**: Kafka UI muestra mensajes en `wikimedia.raw.events`
-3. **Transform procesando**: Logs muestran filtrado de eventos
-4. **Mensajes en filtered topic**: Kafka UI muestra mensajes en `wikimedia.filtered.events`
-5. **Persistencia en MongoDB**: Consulta directa a la base de datos
-6. **API disponible**: `curl` a los endpoints REST
+### Verify Complete Flow
+1. **Producer working**: Logs show Wikimedia stream connection
+2. **Messages in raw topic**: Kafka UI shows messages in `wikimedia.raw.events`
+3. **Transform processing**: Logs show event filtering
+4. **Messages in filtered topic**: Kafka UI shows messages in `wikimedia.filtered.events`
+5. **MongoDB persistence**: Direct database query
+6. **API available**: `curl` to REST endpoints
 
-### Comandos de test
+### Test Commands
 ```bash
-# Test básico del pipeline
-./test-pipeline.sh
+# Complete pipeline test
+./test-docker-pipeline.sh
 
-# O manualmente:
+# Manual API test
 curl -s http://localhost:8090/api/wikimedia-events/events | jq '.data | length'
+
+# Health check all services
+curl http://localhost:8081/actuator/health && \
+curl http://localhost:8080/actuator/health && \
+curl http://localhost:8090/api/wikimedia-events/actuator/health
 ```
 
-## 🚨 Solución de problemas
+## 🚨 Troubleshooting
 
-### Servicios no inician
+### Services Don't Start
 ```bash
-# Verificar logs
-docker-compose logs [service-name]
+# Check logs
+docker compose logs [service-name]
 
-# Reiniciar un servicio específico
-docker-compose restart producer-wikimedia
+# Restart specific service
+docker compose restart producer-wikimedia
+
+# Force complete rebuild
+./test-docker-pipeline.sh
 ```
 
-### Sin datos en MongoDB
-1. Verificar que el producer está conectado al stream de Wikimedia
-2. Verificar que hay mensajes en los tópicos de Kafka
-3. Verificar que el transform está procesando (filtros no muy restrictivos)
-4. Verificar conexión del consumer a MongoDB
+### Health Check Failures
+- **Transform service "unhealthy"**: Fixed with `spring-boot-starter-web` dependency
+- **Long startup times**: Health checks now have 90s start period with 5 retries
+- **Empty replies**: Ensure actuator endpoints are properly configured
 
-### Problemas de conectividad
+### No Data in MongoDB
+1. Verify producer is connected to Wikimedia stream
+2. Check messages exist in Kafka topics
+3. Verify transform is processing (filters not too restrictive)
+4. Check consumer MongoDB connection
+
+### Connectivity Issues
 ```bash
-# Verificar red de Docker
+# Check Docker network
 docker network ls
 docker network inspect wikimedia-lab_default
 
-# Verificar conectividad entre contenedores
+# Test container connectivity
 docker exec producer-wikimedia ping kafka
 docker exec consumer-wikimedia ping mongodb
 ```
 
-## 🏁 Parar el sistema
+### Apple Silicon (M1/M2/M3) Issues
+```bash
+# Clean everything and start fresh
+docker compose down -v
+docker system prune -f
+./test-docker-pipeline.sh
+```
+
+## 🏁 Stop the System
 
 ```bash
-# Parar todos los servicios
-docker-compose down
+# Stop all services
+docker compose down
 
-# Parar y eliminar volúmenes (CUIDADO: elimina datos)
-docker-compose down -v
+# Stop and remove volumes (WARNING: deletes data)
+docker compose down -v
 
-# Limpiar imágenes construidas
-docker-compose down --rmi local
+# Clean built images
+docker compose down --rmi local
 ```
-## 🤝 Contribuir
 
-1. Fork del repositorio
-2. Crear rama feature (`git checkout -b feature/amazing-feature`)
-3. Commit cambios (`git commit -m 'Add amazing feature'`)
-4. Push a la rama (`git push origin feature/amazing-feature`)
-5. Abrir Pull Request
+## 📁 Project Structure
 
-## 📄 Licencia
+```
+wikimedia-lab/
+├── docker-compose.yml              # Main orchestration file
+├── test-docker-pipeline.sh         # Automated test script
+├── producer-wikimedia/             # Wikimedia stream producer
+│   ├── Dockerfile
+│   └── boot/src/main/resources/
+│       ├── application.yml         # Local config
+│       └── application-docker.yml  # Docker config
+├── transform-wikimedia/            # Event transformation service
+│   ├── Dockerfile
+│   └── boot/src/main/resources/
+│       ├── application.yml         # Local config
+│       └── application-docker.yml  # Docker config
+└── consumer-wikimedia/             # MongoDB consumer + REST API
+    ├── Dockerfile
+    └── boot/src/main/resources/
+        ├── application.yml         # Local config
+        └── application-docker.yml  # Docker config
+```
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+## 🔧 Recent Fixes
+
+### Fixed Issues
+- ✅ **YAML duplicate key error** in producer configuration
+- ✅ **Transform service health checks** by adding `spring-boot-starter-web`
+- ✅ **Docker compose health check timing** with realistic timeouts
+- ✅ **Service dependencies** ensuring proper startup sequence
+- ✅ **Apple Silicon compatibility** with ARM64-compatible base images
+
+### Configuration Improvements
+- ✅ **Separate Docker configurations** for each service
+- ✅ **Environment variable mapping** in docker-compose
+- ✅ **Health check optimization** with longer start periods
+- ✅ **Automated cleanup script** for complete rebuilds
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

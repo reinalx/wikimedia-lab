@@ -1,6 +1,7 @@
 package com.learn.wikimedialab.domain.events;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.time.OffsetDateTime;
 
 /**
  * Record representing a Wikimedia event.
@@ -14,7 +15,8 @@ public record WikimediaEvent(
     String titleUrl,
     String comment,
     boolean bot,
-    MetaInfo meta
+    MetaInfo meta,
+    OffsetDateTime createdAt
 ) {
 
 }
