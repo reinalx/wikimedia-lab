@@ -24,4 +24,12 @@ public interface WikimediaEventsPort {
    */
   List<WikimediaEvent> getWikimediaEvents(int page, int size);
 
+  /**
+   * Checks if a Wikimedia event exists by its ID.
+   *
+   * @param id The ID of the Wikimedia event.
+   * @return true if the event exists, false otherwise.
+   */
+  boolean existsWikimediaEventById(String id);
+
 }

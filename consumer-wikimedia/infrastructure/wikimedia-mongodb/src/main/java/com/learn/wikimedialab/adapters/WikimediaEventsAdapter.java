@@ -49,4 +49,15 @@ public class WikimediaEventsAdapter implements WikimediaEventsPort {
         .toList();
 
   }
+
+  /**
+   * Checks if a Wikimedia event exists by its ID.
+   *
+   * @param id the ID of the Wikimedia event
+   * @return true if the event exists, false otherwise
+   */
+  @Override
+  public boolean existsWikimediaEventById(String id) {
+    return this.wikimediaEventRepository.existsById(id);
+  }
 }

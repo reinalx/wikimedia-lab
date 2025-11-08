@@ -7,7 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public enum ErrorCode {
-  PRODUCT_NOT_FOUND(1001, "Product not found");
+  EVENT_NOT_FOUND(1001, "Event not found");
 
   private final int code;
 
