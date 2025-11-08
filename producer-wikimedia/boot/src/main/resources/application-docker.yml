@@ -1,0 +1,37 @@
+server:
+  address: 0.0.0.0
+  port: 8081
+
+spring:
+  application:
+    name: producer-wikimedia-labs
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
+
+wikimedia:
+  stream:
+    url: ${WIKIMEDIA_STREAM_URL}
+
+app:
+  kafka:
+    topics:
+      raw: ${APP_KAFKA_TOPICS_RAW}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.web.reactive: DEBUG
+    reactor.netty: INFO
+    com.learn: DEBUG
+    org.springframework.kafka: INFO

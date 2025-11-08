@@ -1,41 +1,45 @@
-# Dockerfile simplificado para Apple Silicon/ARM64
+# Simplified Dockerfile for Apple Silicon/ARM64
 FROM amazoncorretto:21-alpine-jdk AS build
 
 WORKDIR /app
 
-# Instalar Maven manualmente
+# Manually install Maven
 RUN apk add --no-cache maven
 
-# Copiar código fuente
+# Copy source code
 COPY . .
 
-# Compilar aplicación
+# Build the application
 RUN mvn clean package -DskipTests
 
-# Imagen de runtime
+# Runtime image
 FROM amazoncorretto:21-alpine
 
 WORKDIR /app
 
-# Instalar curl para health checks
+# Install curl for health checks
 RUN apk add --no-cache curl
 
-# Crear usuario no-root
+# Create non-root user
 RUN addgroup -g 1001 -S appuser && \
     adduser -u 1001 -S appuser -G appuser
 
-# Copiar JAR con el nombre correcto generado por Maven
+# Copy JAR with the correct Maven-generated name
 COPY --from=build /app/boot/target ./target
 RUN cp target/producer-wikimedia-boot-*.jar app.jar && rm -rf target
 
-# Cambiar propietario
+# Change ownership
 RUN chown -R appuser:appuser /app
 
+# Switch to non-root user
 USER appuser
 
+# Expose port
 EXPOSE 8081
 
+# Set environment variables
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
 ENV SPRING_PROFILES_ACTIVE=docker
 
+# Entry point
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

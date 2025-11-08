@@ -17,7 +17,7 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
-      - "29092:29092" # Puerto interno accesible dentro de la red docker
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -26,7 +26,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false" # desactivamos auto-creación
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
     volumes:
       - kafka-data:/var/lib/kafka/data
 
@@ -42,12 +42,12 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
-  # --- KAFKA UI (opcional, útil para debug) ---
+  # --- KAFKA UI (optional ---
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
     ports:
-      - "8082:8080"  # Cambiado a 8082 para evitar conflicto con transform-wikimedia
+      - "8082:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
@@ -56,7 +56,7 @@ services:
       - kafka
       - zookeeper
 
-  # --- TOPIC CREATOR (se ejecuta una vez) ---
+  # --- TOPIC CREATOR ---
   kafka-init-topics:
     image: confluentinc/cp-kafka:7.6.0
     container_name: kafka-init-topics
@@ -89,13 +89,15 @@ services:
     depends_on:
       kafka-init-topics:
         condition: service_completed_successfully
+      kafka:
+        condition: service_started
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
-      interval: 30s
+      interval: 20s
       timeout: 10s
-      retries: 3
-      start_period: 60s
+      retries: 5
+      start_period: 90s
 
   # --- TRANSFORM WIKIMEDIA SERVICE ---
   transform-wikimedia:
@@ -116,13 +118,15 @@ services:
     depends_on:
       producer-wikimedia:
         condition: service_healthy
+      kafka:
+        condition: service_started
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
+      interval: 20s
       timeout: 10s
-      retries: 3
-      start_period: 60s
+      retries: 5
+      start_period: 90s
 
   # --- CONSUMER WIKIMEDIA SERVICE ---
   consumer-wikimedia:
@@ -146,13 +150,15 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_started
+      kafka:
+        condition: service_started
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8090/api/wikimedia-events/actuator/health"]
-      interval: 30s
+      interval: 20s
       timeout: 10s
-      retries: 3
-      start_period: 60s
+      retries: 5
+      start_period: 90s
 
 volumes:
   kafka-data:
