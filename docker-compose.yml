@@ -1,0 +1,165 @@
+services:
+  # --- ZOOKEEPER ---
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  # --- KAFKA ---
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+
+  # --- MONGODB ---
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  # --- KAFKA UI (optional ---
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "8082:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    depends_on:
+      - kafka
+      - zookeeper
+
+  # --- TOPIC CREATOR ---
+  kafka-init-topics:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: kafka-init-topics
+    depends_on:
+      - kafka
+    entrypoint: ["/bin/bash", "-c"]
+    command: |
+      "
+      echo 'Esperando a Kafka...';
+      sleep 10;
+      kafka-topics --create --topic wikimedia.raw.events --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1;
+      kafka-topics --create --topic wikimedia.filtered.events --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1;
+      echo 'Tópicos creados: wikimedia.raw.events y wikimedia.filtered.events';
+      "
+
+  # --- PRODUCER WIKIMEDIA SERVICE ---
+  producer-wikimedia:
+    build:
+      context: ./producer-wikimedia
+      dockerfile: Dockerfile
+    container_name: producer-wikimedia
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      WIKIMEDIA_STREAM_URL: https://stream.wikimedia.org/v2/stream/recentchange
+      APP_KAFKA_TOPICS_RAW: wikimedia.raw.events
+      JAVA_OPTS: "-Xmx512m -Xms256m"
+    depends_on:
+      kafka-init-topics:
+        condition: service_completed_successfully
+      kafka:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # --- TRANSFORM WIKIMEDIA SERVICE ---
+  transform-wikimedia:
+    build:
+      context: ./transform-wikimedia
+      dockerfile: Dockerfile
+    container_name: transform-wikimedia
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: wikimedia-processor
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: latest
+      APP_KAFKA_TOPICS_RAW: wikimedia.raw.events
+      APP_KAFKA_TOPICS_FILTERED: wikimedia.filtered.events
+      JAVA_OPTS: "-Xmx512m -Xms256m"
+    depends_on:
+      producer-wikimedia:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # --- CONSUMER WIKIMEDIA SERVICE ---
+  consumer-wikimedia:
+    build:
+      context: ./consumer-wikimedia
+      dockerfile: Dockerfile
+    container_name: consumer-wikimedia
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: wikimedia-consumer
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: latest
+      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongodb:27017/wikimedia?authSource=admin
+      APP_KAFKA_TOPICS_FILTERED: wikimedia.filtered.events
+      SERVER_SERVLET_CONTEXT_PATH: /api/wikimedia-events
+      JAVA_OPTS: "-Xmx512m -Xms256m"
+    depends_on:
+      transform-wikimedia:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      kafka:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/api/wikimedia-events/actuator/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+volumes:
+  kafka-data:
+  mongo-data:

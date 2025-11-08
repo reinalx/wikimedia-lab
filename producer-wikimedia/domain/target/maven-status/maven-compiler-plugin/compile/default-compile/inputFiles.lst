@@ -1,0 +1,7 @@
+/Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/events/Topics.java
+/Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/exceptions/StreamErrorException.java
+/Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/exceptions/base/BaseWikimediaLabException.java
+/Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/exceptions/base/ConflictWikimediaLabException.java
+/Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/exceptions/base/NotFoundWikimediaLabException.java
+/Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/services/StreamingProcessingService.java
+/Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/values/ErrorCode.java

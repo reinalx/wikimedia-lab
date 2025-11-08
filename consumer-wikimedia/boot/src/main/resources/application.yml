@@ -1,0 +1,23 @@
+server:
+  address: 0.0.0.0
+  port: 8090
+  servlet:
+    context-path: /api/wikimedia-events
+
+spring:
+  application:
+    name: template
+  data:
+    mongodb:
+      uri: mongodb://root:example@localhost:27017/wikimedia?authSource=admin
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: wikimedia-consumer
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+app:
+  kafka:
+    topics:
+      filtered: wikimedia.filtered.events

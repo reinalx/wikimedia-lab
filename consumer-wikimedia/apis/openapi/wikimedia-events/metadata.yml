@@ -1,0 +1,14 @@
+# Metadata for the  Wikimedia Events API
+api:
+  name: Wikimedia Events API
+  version: 0.0.1
+  description: >
+    This API allows managing and retrieving wikimedia event information within the system.
+  maintainer:
+    name: Andrés Reinaldo Cid
+    email: andres@example.com
+  tags:
+    - Wikimedia
+  basePath: /wikimedia-events
+  documentation:
+    url: ./README.md
