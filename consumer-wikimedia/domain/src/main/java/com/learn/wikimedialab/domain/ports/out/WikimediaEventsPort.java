@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.domain.ports.out;
 
-import com.learn.wikimedialab.domain.entities.events.WikimediaEvent;
+import com.learn.wikimedialab.domain.entities.WikimediaEvent;
 import java.util.List;
 
 /**

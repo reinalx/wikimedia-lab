@@ -3,7 +3,7 @@ package com.learn.wikimedialab.apirest.controller;
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events.EventsApi;
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events.model.GetWikimediaEventsResponseDTO;
 import com.learn.wikimedialab.apirest.mapper.RestWikimediaMapper;
-import com.learn.wikimedialab.domain.entities.events.WikimediaEvent;
+import com.learn.wikimedialab.domain.entities.WikimediaEvent;
 import com.learn.wikimedialab.domain.ports.in.services.EventsService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

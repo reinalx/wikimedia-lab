@@ -1,4 +1,4 @@
-package com.learn.wikimedialab.domain.entities.events;
+package com.learn.wikimedialab.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.OffsetDateTime;
