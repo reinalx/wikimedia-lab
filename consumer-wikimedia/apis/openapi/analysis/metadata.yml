@@ -1,0 +1,13 @@
+api:
+  name: Wikimedia Users Api
+  version: 0.0.1
+  description: >
+    This API allows managing users.
+  maintainer:
+    name: Andrés Reinaldo Cid
+    email: andresrc345@gmail.com
+  tags:
+    - Users
+  basePath: /wikimedia
+  documentation:
+    url: ./README.md

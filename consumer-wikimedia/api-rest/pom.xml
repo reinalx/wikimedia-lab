@@ -100,10 +100,10 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/../apis/openapi/wikimedia-events/openapi-rest.yml</inputSpec>
+                            <inputSpec>${project.basedir}/../apis/openapi/events/openapi-rest.yml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia</apiPackage>
-                            <modelPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.model</modelPackage>
+                            <apiPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events</apiPackage>
+                            <modelPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events.model</modelPackage>
                             <modelNameSuffix>DTO</modelNameSuffix>
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
@@ -116,9 +116,54 @@
                             </configOptions>
                         </configuration>
                     </execution>
+                    <execution>
+                      <id>generate-users-api</id>
+                      <phase>generate-sources</phase>
+                      <goals>
+                        <goal>generate</goal>
+                      </goals>
+                      <configuration>
+                        <inputSpec>${project.basedir}/../apis/openapi/users/openapi-rest.yml</inputSpec>
+                        <generatorName>spring</generatorName>
+                        <apiPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.users</apiPackage>
+                        <modelPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.users.model</modelPackage>
+                        <modelNameSuffix>DTO</modelNameSuffix>
+                        <configOptions>
+                          <interfaceOnly>true</interfaceOnly>
+                          <useTags>true</useTags>
+                          <skipDefaultInterface>true</skipDefaultInterface>
+                          <useLombok>true</useLombok>
+                          <lombokBuilder>true</lombokBuilder>
+                          <useSpringBoot3>true</useSpringBoot3>
+                          <openApiNullable>false</openApiNullable>
+                        </configOptions>
+                      </configuration>
+                    </execution>
+                    <execution>
+                      <id>generate-analysis-api</id>
+                      <phase>generate-sources</phase>
+                      <goals>
+                        <goal>generate</goal>
+                      </goals>
+                      <configuration>
+                        <inputSpec>${project.basedir}/../apis/openapi/analysis/openapi-rest.yml</inputSpec>
+                        <generatorName>spring</generatorName>
+                        <apiPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.analysis</apiPackage>
+                        <modelPackage>com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.analysis.model</modelPackage>
+                        <modelNameSuffix>DTO</modelNameSuffix>
+                        <configOptions>
+                          <interfaceOnly>true</interfaceOnly>
+                          <useTags>true</useTags>
+                          <skipDefaultInterface>true</skipDefaultInterface>
+                          <useLombok>true</useLombok>
+                          <lombokBuilder>true</lombokBuilder>
+                          <useSpringBoot3>true</useSpringBoot3>
+                          <openApiNullable>false</openApiNullable>
+                        </configOptions>
+                      </configuration>
+                    </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

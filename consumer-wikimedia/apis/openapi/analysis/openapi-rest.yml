@@ -1,0 +1,20 @@
+openapi: 3.0.3
+
+info:
+  title: Wikimedia Users Api
+  description: This API allows managing users and authentication.
+  contact:
+    name: Andrés Reinaldo Cid
+    email: andresrc345@gmail.com
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:8080
+    description: Localhost
+
+tags:
+  - name: Users
+    description: Operations about Wikimedia Users
+paths:
+  /v1/auth/login:
+    $ref: 'v1/services/users/login.yml'
