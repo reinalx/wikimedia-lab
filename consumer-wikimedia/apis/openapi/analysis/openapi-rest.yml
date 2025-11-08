@@ -1,8 +1,8 @@
 openapi: 3.0.3
 
 info:
-  title: Wikimedia Users Api
-  description: This API allows managing users and authentication.
+  title: Wikimedia Analysis Api
+  description: This API allows managing analysis of wikimedia event information within the system.
   contact:
     name: Andrés Reinaldo Cid
     email: andresrc345@gmail.com
@@ -13,8 +13,18 @@ servers:
     description: Localhost
 
 tags:
-  - name: Users
-    description: Operations about Wikimedia Users
+  - name: Analysis
+    description: Operations about Wikimedia Analysis events
 paths:
-  /v1/auth/login:
-    $ref: 'v1/services/users/login.yml'
+  /v1/analysis:
+    $ref: 'v1/services/analysis/analysis.yml'
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

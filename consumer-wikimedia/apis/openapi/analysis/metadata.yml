@@ -1,8 +1,8 @@
 api:
-  name: Wikimedia Users Api
+  name: Wikimedia Analysis Api
   version: 0.0.1
   description: >
-    This API allows managing users.
+    This API allows managing Analysis of events.
   maintainer:
     name: Andrés Reinaldo Cid
     email: andresrc345@gmail.com

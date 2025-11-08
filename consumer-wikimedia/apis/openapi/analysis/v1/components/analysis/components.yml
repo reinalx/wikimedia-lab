@@ -1,0 +1,31 @@
+components:
+  schemas:
+    EventId:
+      type: string
+      description: Unique identifier for a Wikimedia event
+      minLength: 1
+      maxLength: 100
+      example: "339339603"
+    analysis:
+      type: string
+      description: Analysis content for the event
+      minLength: 1
+      maxLength: 5000
+      example: "This event shows a significant increase in user engagement."
+    sentiment:
+      type: string
+      description: Sentiment classification of the analysis.
+      enum: [ positive, neutral, negative ]
+      example: "neutral"
+    CreateEventAnalysisRequest:
+      type: object
+      required:
+        - eventId
+        - analysis
+      properties:
+        eventId:
+          $ref: '#/components/schemas/EventId'
+        analysis:
+          $ref: '#/components/schemas/analysis'
+        sentiment:
+          $ref: '#/components/schemas/sentiment'

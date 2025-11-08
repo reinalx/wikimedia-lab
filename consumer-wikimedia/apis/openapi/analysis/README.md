@@ -1,9 +1,9 @@
-# 🧩 Wikimedia Events API
+# 📊 Wikimedia Analysis API
 
 ## Overview
 
-This is an **example API definition** used to demonstrate how to organize and define APIs within this project’s structure.  
-Each API (e.g., `products`, `purchases`, `users`) must follow **the same directory layout** so that the automatic OpenAPI code generation works correctly.
+This API provides event analysis functionality for the Wikimedia system.  
+It handles the creation and management of analysis records for Wikimedia events, including content analysis and sentiment classification.
 
 ---
 
@@ -14,11 +14,11 @@ Each API lives inside its own subfolder, which must contain **three required fil
 
 ``` 
 └── /openapi
-├── /products
+├── /analysis
 │ ├── metadata.yml
 │ ├── openapi-rest.yml
 │ └── README.md
-├── /purchases
+├── /events
 │ ├── metadata.yml
 │ ├── openapi-rest.yml
 │ └── README.md
@@ -27,7 +27,6 @@ Each API lives inside its own subfolder, which must contain **three required fil
 ├── openapi-rest.yml
 └── README.md
 ```
-
 
 ### 📌 Mandatory Files
 
@@ -59,32 +58,29 @@ This project uses **OpenAPI Generator** to create the API interfaces automatical
 
 ---
 
-## 🧾 Example Documentation Template
-
-Below is a **template** for what each API README should include.  
-When you create a new API (e.g., `purchases`, `users`), update these sections with your specific information.
-
----
-
 ## Summary
 
-Welcome to the documentation for the **Products API**.  
-This API allows you to manage and retrieve product information within the system.
+Welcome to the documentation for the **Wikimedia Analysis API**.  
+This API enables the creation and management of analysis records for Wikimedia events, providing insights and sentiment analysis capabilities.
 
 ---
 
 ## About
 
-The **Products API** provides access to product-related operations, including creation, update, and retrieval of product details.  
-It serves as an example for structuring and documenting APIs in this monorepo.
+The **Wikimedia Analysis API** provides comprehensive event analysis capabilities including:
+- Event analysis creation and storage
+- Content analysis for Wikimedia events
+- Sentiment classification (positive, neutral, negative)
+- Integration with Wikimedia event processing system
+- Secure access control with JWT authentication
 
 ---
 
 ## Configuration
 
-Before using the API, you must configure authentication credentials.  
-The API uses **Basic Authentication** or **Bearer Tokens** depending on your backend configuration.  
-Include your credentials in every request header to access protected endpoints.
+Before using the API, you must configure JWT authentication credentials.  
+The API uses Bearer token authentication for secure access to protected endpoints.  
+Include your JWT token in the Authorization header for every request.
 
 ---
 
@@ -95,19 +91,90 @@ The main specification file is [`openapi-rest.yml`](./openapi-rest.yml).
 
 It includes the following endpoints:
 
-1. `GET /products` — Retrieve a list of products.
-2. `POST /products` — Create a new product.
-3. `GET /products/{id}` — Retrieve details for a specific product.
+1. `POST /v1/analysis` — Create a new analysis for a Wikimedia event
 
-Refer to `openapi-rest.yml` for detailed endpoint specifications.
+Refer to `openapi-rest.yml` for detailed endpoint specifications, request/response schemas, and authentication requirements.
 
 ---
 
 ## Example
 
-### Returns list of products
+### Create Event Analysis
 
 ```http
-GET /products
-Authorization: Basic your_base64_encoded_credentials
+POST /v1/analysis
+Content-Type: application/json
 Accept: application/json
+Authorization: Bearer <your-jwt-token>
+
+{
+  "eventId": "339339603",
+  "analysis": "This event shows a significant increase in user engagement with positive community response.",
+  "sentiment": "positive"
+}
+```
+
+### Response
+
+```http
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "message": "Analysis created successfully"
+}
+```
+
+---
+
+## Schema Details
+
+### CreateEventAnalysisRequest
+
+| Field | Type | Required | Description | Example |
+|-------|------|----------|-------------|---------|
+| `eventId` | string | ✅ | Unique identifier for a Wikimedia event (1-100 chars) | `"339339603"` |
+| `analysis` | string | ✅ | Analysis content for the event (1-5000 chars) | `"This event shows..."` |
+| `sentiment` | string | ❌ | Sentiment classification | `"positive"`, `"neutral"`, `"negative"` |
+
+---
+
+## Authentication
+
+This API uses **JWT Bearer Token** authentication. Include the token in your requests:
+
+```http
+Authorization: Bearer <your-jwt-token>
+```
+
+---
+
+## Error Responses
+
+The API returns standard HTTP status codes:
+
+- `400 Bad Request` - Invalid request data
+- `401 Unauthorized` - Missing or invalid authentication token
+- `403 Forbidden` - Access denied for the requested resource
+- `404 Not Found` - Event or resource not found
+- `500 Internal Server Error` - Server-side error
+
+---
+
+## Maintainer
+
+**Andrés Reinaldo Cid**  
+Email: andresrc345@gmail.com
+
+---
+
+## Version
+
+Current API Version: **0.0.1**
+
+---
+
+## Base Path
+
+API Base Path: `/wikimedia`  
+Full URL: `http://localhost:8080/wikimedia`
