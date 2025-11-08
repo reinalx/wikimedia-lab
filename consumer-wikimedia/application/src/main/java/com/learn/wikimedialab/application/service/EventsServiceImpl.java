@@ -1,8 +1,8 @@
 package com.learn.wikimedialab.application.service;
 
-import com.learn.wikimedialab.domain.adapters.WikimediaEventsAdapter;
-import com.learn.wikimedialab.domain.events.WikimediaEvent;
-import com.learn.wikimedialab.domain.services.WikimediaEventsService;
+import com.learn.wikimedialab.domain.entities.events.WikimediaEvent;
+import com.learn.wikimedialab.domain.ports.in.services.EventsService;
+import com.learn.wikimedialab.domain.ports.out.WikimediaEventsPort;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class WikimediaEventsServiceImpl implements WikimediaEventsService {
+public class EventsServiceImpl implements EventsService {
 
-  private final WikimediaEventsAdapter wikimediaEventsAdapter;
+  private final WikimediaEventsPort wikimediaEventsAdapter;
 
   @Override
   public void processEvent(WikimediaEvent event) {

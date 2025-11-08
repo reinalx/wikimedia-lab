@@ -1,12 +1,12 @@
-package com.learn.wikimedialab.domain.services;
+package com.learn.wikimedialab.domain.ports.in.services;
 
-import com.learn.wikimedialab.domain.events.WikimediaEvent;
+import com.learn.wikimedialab.domain.entities.events.WikimediaEvent;
 import java.util.List;
 
 /**
  * Service interface for processing Wikimedia events.
  */
-public interface WikimediaEventsService {
+public interface EventsService {
 
   /**
    * Processes a Wikimedia event.

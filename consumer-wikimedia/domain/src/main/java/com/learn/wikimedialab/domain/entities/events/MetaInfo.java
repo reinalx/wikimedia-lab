@@ -1,4 +1,4 @@
-package com.learn.wikimedialab.domain.events;
+package com.learn.wikimedialab.domain.entities.events;
 
 /**
  * Record representing metadata associated with a Wikimedia event.

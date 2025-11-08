@@ -1,12 +1,12 @@
-package com.learn.wikimedialab.domain.adapters;
+package com.learn.wikimedialab.domain.ports.out;
 
-import com.learn.wikimedialab.domain.events.WikimediaEvent;
+import com.learn.wikimedialab.domain.entities.events.WikimediaEvent;
 import java.util.List;
 
 /**
  * Adapter interface for filtering events.
  */
-public interface WikimediaEventsAdapter {
+public interface WikimediaEventsPort {
 
   /**
    * Saves a filtered Wikimedia event.
