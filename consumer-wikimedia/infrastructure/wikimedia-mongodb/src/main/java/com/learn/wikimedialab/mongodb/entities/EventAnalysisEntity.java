@@ -1,5 +1,6 @@
 package com.learn.wikimedialab.mongodb.entities;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,34 +10,28 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * Entity representing a Wikimedia event stored in MongoDB.
+ * Entity representing an analysis performed by a user on a Wikimedia event.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "events")
-public class WikimediaEventEntity {
+@Document(collection = "event_analysis")
+public class EventAnalysisEntity {
 
   @Id
   private String id;
 
-  private String type;
+  @Indexed
+  private String eventId;
+
+  private String analysis;
 
   @Indexed
-  private String user;
+  private String userId;
 
-  private String title;
-
-  private String titleUrl;
-
-  private String comment;
-
-  private boolean bot;
-
-  private MetaInfoEntity meta;
+  private String sentiment;
 
   @Builder.Default
   private Long createdAt = System.currentTimeMillis();
-
 }

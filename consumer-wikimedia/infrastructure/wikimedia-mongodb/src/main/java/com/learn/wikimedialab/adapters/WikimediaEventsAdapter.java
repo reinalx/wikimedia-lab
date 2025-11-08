@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class WikimediaEventsAdapterImpl implements WikimediaEventsPort {
+public class WikimediaEventsAdapter implements WikimediaEventsPort {
 
   private final WikimediaEventRepository wikimediaEventRepository;
 
