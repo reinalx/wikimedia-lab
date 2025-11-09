@@ -1,6 +1,7 @@
 package com.learn.wikimedialab.application.interceptor;
 
 import com.learn.wikimedialab.domain.exceptions.base.BaseWikimediaException;
+import com.learn.wikimedialab.domain.exceptions.base.InvalidWikimediaException;
 import com.learn.wikimedialab.domain.exceptions.base.NotFoundWikimediaException;
 import com.learn.wikimedialab.domain.exceptions.base.UnauthorizedWikimediaException;
 import java.util.HashMap;
@@ -48,6 +49,18 @@ public class GlobalExceptionHandler {
   public ResponseEntity<Map<String, String>> handleVisitsException(
       UnauthorizedWikimediaException ex) {
     return this.buildErrorResponse(ex, HttpStatus.UNAUTHORIZED);
+  }
+
+  /**
+   * Handles InvalidWikimediaException and returns an appropriate error response.
+   *
+   * @param ex the InvalidWikimediaException instance
+   * @return ResponseEntity containing the error response map and HTTP status
+   */
+  @ExceptionHandler(InvalidWikimediaException.class)
+  public ResponseEntity<Map<String, String>> handleVisitsException(
+      InvalidWikimediaException ex) {
+    return this.buildErrorResponse(ex, HttpStatus.BAD_REQUEST);
   }
 
 

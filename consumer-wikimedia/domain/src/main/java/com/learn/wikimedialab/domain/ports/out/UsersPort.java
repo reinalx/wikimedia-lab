@@ -14,4 +14,11 @@ public interface UsersPort {
    * @return The User entity if found, otherwise null.
    */
   User findByUsername(String username);
+
+  /**
+   * Creates a user if they do not already exist.
+   *
+   * @param user The User entity to create.
+   */
+  void createIfNotExist(User user);
 }

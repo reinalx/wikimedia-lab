@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -41,9 +43,9 @@ public class SecurityConfig {
             httpSecuritySessionManagementConfigurer.sessionCreationPolicy(
                 SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("v1/auth/login").permitAll()
-            .requestMatchers("v1/analysis").hasRole("EDITOR")
-            .requestMatchers("v1/events").authenticated()
+            .requestMatchers("/v1/auth/login").permitAll()
+            .requestMatchers("/v1/analysis").hasRole("EDITOR")
+            .requestMatchers("/v1/events").authenticated()
         )
         .addFilterBefore(new JwtFilter(authenticationManager),
             UsernamePasswordAuthenticationFilter.class);
@@ -65,6 +67,16 @@ public class SecurityConfig {
         http.getSharedObject(AuthenticationManagerBuilder.class);
     authenticationManagerBuilder.authenticationProvider(this.authenticationProvider);
     return authenticationManagerBuilder.build();
+  }
+
+  /**
+   * Password encoder bean configuration.
+   *
+   * @return PasswordEncoder
+   */
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 
 

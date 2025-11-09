@@ -1,6 +1,7 @@
 package com.learn.wikimedialab.auth;
 
 import com.learn.wikimedialab.domain.entities.JwtInfo;
+import com.learn.wikimedialab.domain.entities.auth.UserDetails;
 import com.learn.wikimedialab.domain.exceptions.JwtExpiredException;
 import com.learn.wikimedialab.domain.ports.in.services.JwtService;
 import java.util.HashSet;

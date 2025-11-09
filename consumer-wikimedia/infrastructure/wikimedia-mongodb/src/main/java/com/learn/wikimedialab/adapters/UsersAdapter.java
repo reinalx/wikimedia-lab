@@ -3,6 +3,7 @@ package com.learn.wikimedialab.adapters;
 import com.learn.wikimedialab.domain.entities.User;
 import com.learn.wikimedialab.domain.ports.out.UsersPort;
 import com.learn.wikimedialab.mappers.UsersMapper;
+import com.learn.wikimedialab.mongodb.entities.UserEntity;
 import com.learn.wikimedialab.repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,5 +27,21 @@ public class UsersAdapter implements UsersPort {
     return this.usersRepository.findByUsername(username)
         .map(this.usersMapper::toDomain)
         .orElse(null);
+  }
+
+  /**
+   * Initializes the adapter by logging the number of users in the repository.
+   */
+  @Override
+  public void createIfNotExist(User user) {
+    final UserEntity userEntity = this.usersMapper.toEntity(user);
+    this.usersRepository.findByUsername(userEntity.getUsername())
+        .ifPresentOrElse(
+            userFounded -> log.info("User {} already exists", userFounded.getUsername()),
+            () -> {
+              this.usersRepository.save(userEntity);
+              log.info("User {} created", userEntity.getUsername());
+            }
+        );
   }
 }

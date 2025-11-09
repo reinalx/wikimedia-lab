@@ -1,5 +1,6 @@
 package com.learn.wikimedialab.auth;
 
+import com.learn.wikimedialab.domain.entities.auth.UserDetails;
 import java.io.Serial;
 import java.util.Collection;
 import lombok.Getter;

@@ -18,4 +18,11 @@ public interface UsersMapper {
    */
   User toDomain(UserEntity userEntity);
 
+  /**
+   * Maps a User domain entity to a UserEntity.
+   *
+   * @param domainUser the User domain entity to map
+   * @return the mapped UserEntity
+   */
+  UserEntity toEntity(User domainUser);
 }

@@ -1,4 +1,4 @@
-package com.learn.wikimedialab.auth;
+package com.learn.wikimedialab.domain.entities.auth;
 
 import java.io.Serial;
 import java.io.Serializable;
