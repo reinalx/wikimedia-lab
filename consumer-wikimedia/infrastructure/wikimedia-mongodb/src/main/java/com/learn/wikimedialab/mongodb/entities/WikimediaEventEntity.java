@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "wikimedia_events")
+@Document(collection = "events")
 public class WikimediaEventEntity {
 
   @Id

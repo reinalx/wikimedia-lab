@@ -1,0 +1,29 @@
+post:
+  tags:
+    - Users
+  summary: User login
+  description: Authenticates a user and returns a JWT token
+  operationId: loginUser
+  requestBody:
+      required: true
+      content:
+        application/json:
+            schema:
+              $ref: '../../components/users/components.yml#/components/schemas/LoginUserRequest'
+  responses:
+    "200":
+      description: Successful login
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/users/components.yml#/components/schemas/LoginUserResponse'
+    '400':
+        $ref: '../../components/errors/components.yml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../components/errors/components.yml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../components/errors/components.yml#/components/responses/Forbidden'
+    "404":
+      $ref: '../../components/errors/components.yml#/components/responses/NotFound'
+    '500':
+      $ref: '../../components/errors/components.yml#/components/responses/InternalServerError'

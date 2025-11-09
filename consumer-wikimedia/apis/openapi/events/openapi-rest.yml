@@ -1,0 +1,30 @@
+openapi: 3.0.3
+
+info:
+  title: Wikimedia Events Api
+  description: This API allows managing and retrieving wikimedia event information within the system.
+  contact:
+    name: Andrés Reinaldo Cid
+    email: andresrc345@gmail.com
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:8080
+    description: Localhost
+
+tags:
+  - name: Events
+    description: Operations about Wikimedia Events
+paths:
+  /v1/events:
+    $ref: 'v1/services/wikimedia/events.yml'
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

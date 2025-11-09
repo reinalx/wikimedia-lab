@@ -1,7 +1,7 @@
 package com.learn.wikimedialab.kafka.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learn.wikimedialab.domain.events.WikimediaEvent;
+import com.learn.wikimedialab.domain.entities.WikimediaEvent;
 import java.io.IOException;
 import org.springframework.stereotype.Component;
 

@@ -39,7 +39,11 @@ This project implements a real-time processing pipeline that consumes the public
 - **Responsibility**: Persists filtered events to MongoDB and exposes REST API
 - **Source Topic**: `wikimedia.filtered.events`
 - **Database**: MongoDB
-- **API**: `/api/wikimedia-events/events`
+- **Available APIs**:
+  - **Events API**: `/api/wikimedia-events/v1/events` - Retrieve wikimedia events with pagination
+  - **Analysis API**: `/api/wikimedia-events/v1/analysis` - Analysis of wikimedia event information
+  - **Users API**: `/api/wikimedia-events/v1/users/login` - User authentication (login with JWT)
+  - **Health Check**: `/api/wikimedia-events/actuator/health`
 
 ## 🚀 Quick Start
 
@@ -126,14 +130,53 @@ Access Kafka UI: http://localhost:8082
 
 ### 5. Verify REST API
 ```bash
-# Query stored events
-curl http://localhost:8090/api/wikimedia-events/events
+# Query stored events (with pagination)
+curl http://localhost:8090/api/wikimedia-events/v1/events
+
+# Query with pagination parameters
+curl "http://localhost:8090/api/wikimedia-events/v1/events?page=0&size=10"
 
 # Check event count
-curl -s http://localhost:8090/api/wikimedia-events/events | jq '.data | length'
+curl -s http://localhost:8090/api/wikimedia-events/v1/events | jq '.data | length'
+
+# Analysis endpoint
+curl http://localhost:8090/api/wikimedia-events/v1/analysis
 ```
 
-### 6. Verify MongoDB
+### 6. User Authentication (Adding Users)
+
+The Consumer Wikimedia service includes user authentication functionality. To add and authenticate users:
+
+#### User Login
+```bash
+# Login with user credentials (returns JWT token)
+curl -X POST http://localhost:8090/api/wikimedia-events/v1/users/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "admin",
+    "password": "password"
+  }'
+```
+
+#### Using JWT Token for Authenticated Requests
+```bash
+# First, get the JWT token from login
+TOKEN=$(curl -X POST http://localhost:8090/api/wikimedia-events/v1/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "password"}' \
+  -s | jq -r '.token')
+
+# Use the token for authenticated requests
+curl http://localhost:8090/api/wikimedia-events/v1/events \
+  -H "Authorization: Bearer $TOKEN"
+
+curl http://localhost:8090/api/wikimedia-events/v1/analysis \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+**Note**: The current implementation includes JWT-based authentication. You may need to implement user registration endpoints or configure default users in the application for the login functionality to work properly.
+
+### 7. Verify MongoDB
 ```bash
 # Connect to MongoDB
 docker exec -it mongodb mongosh -u root -p example --authenticationDatabase admin
@@ -158,8 +201,12 @@ db.events.findOne()
 | Zookeeper | 2181 | Kafka coordination |
 
 ### Useful URLs
-- **Events API**: http://localhost:8090/api/wikimedia-events/events
-- **Kafka UI**: http://localhost:8082
+- **Consumer APIs**:
+  - **Events API**: http://localhost:8090/api/wikimedia-events/v1/events
+  - **Analysis API**: http://localhost:8090/api/wikimedia-events/v1/analysis
+  - **User Login**: http://localhost:8090/api/wikimedia-events/v1/users/login
+- **Monitoring**:
+  - **Kafka UI**: http://localhost:8082
 - **Health Checks**:
   - Producer: http://localhost:8081/actuator/health
   - Transform: http://localhost:8080/actuator/health
@@ -209,8 +256,12 @@ export APP_KAFKA_TOPICS_FILTERED=wikimedia.filtered.events
 # Complete pipeline test
 ./test-docker-pipeline.sh
 
-# Manual API test
-curl -s http://localhost:8090/api/wikimedia-events/events | jq '.data | length'
+# Manual API tests
+curl -s http://localhost:8090/api/wikimedia-events/v1/events | jq '.data | length'
+curl http://localhost:8090/api/wikimedia-events/v1/analysis
+curl -X POST http://localhost:8090/api/wikimedia-events/v1/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "password"}'
 
 # Health check all services
 curl http://localhost:8081/actuator/health && \

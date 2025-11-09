@@ -2,16 +2,23 @@ package com.learn.wikimedialab.domain.values;
 
 import lombok.Getter;
 
+/**
+ * Enumeration of error codes and their corresponding messages.
+ */
 @Getter
 public enum ErrorCode {
-    PRODUCT_NOT_FOUND(1001, "Product not found");
+  EVENT_NOT_FOUND(1001, "Event not found"),
+  USER_NOT_FOUND(1002, "User not found"),
 
-    private final int code;
+  JWT_EXPIRED(1003, "JWT token has expired"),
+  PASSWORD_MISMATCHING(1004, "Passwords do not match");
 
-    private final String message;
+  private final int code;
 
-    ErrorCode(int code, String message) {
-        this.code = code;
-        this.message = message;
-    }
+  private final String message;
+
+  ErrorCode(int code, String message) {
+    this.code = code;
+    this.message = message;
+  }
 }

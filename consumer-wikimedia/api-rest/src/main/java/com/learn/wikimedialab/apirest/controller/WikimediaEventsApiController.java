@@ -1,10 +1,10 @@
 package com.learn.wikimedialab.apirest.controller;
 
-import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.WikimediaApi;
-import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.model.GetWikimediaEventsResponseDTO;
+import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events.EventsApi;
+import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events.model.GetWikimediaEventsResponseDTO;
 import com.learn.wikimedialab.apirest.mapper.RestWikimediaMapper;
-import com.learn.wikimedialab.domain.events.WikimediaEvent;
-import com.learn.wikimedialab.domain.services.WikimediaEventsService;
+import com.learn.wikimedialab.domain.entities.WikimediaEvent;
+import com.learn.wikimedialab.domain.ports.in.services.EventsService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-public class WikimediaEventsApiController implements WikimediaApi {
+public class WikimediaEventsApiController implements EventsApi {
 
-  private final WikimediaEventsService wikimediaEventsService;
+  private final EventsService wikimediaEventsService;
 
   private final RestWikimediaMapper wikimediaMapper;
 

@@ -1,7 +1,7 @@
 package com.learn.wikimedialab.kafka.adapters.in;
 
-import com.learn.wikimedialab.domain.adapters.EventConsumerAdapter;
-import com.learn.wikimedialab.domain.services.WikimediaEventsService;
+import com.learn.wikimedialab.domain.ports.in.services.EventsService;
+import com.learn.wikimedialab.domain.ports.out.EventConsumerPort;
 import com.learn.wikimedialab.kafka.mappers.JsonToObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KafkaEventConsumerAdapter implements EventConsumerAdapter {
+public class KafkaEventConsumerAdapter implements EventConsumerPort {
 
-  private final WikimediaEventsService wikimediaProcessorService;
+  private final EventsService wikimediaProcessorService;
 
   private final JsonToObjectMapper mapper;
 

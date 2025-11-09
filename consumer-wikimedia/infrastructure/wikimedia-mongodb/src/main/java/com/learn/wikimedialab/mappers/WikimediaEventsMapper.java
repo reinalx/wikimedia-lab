@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.mappers;
 
-import com.learn.wikimedialab.domain.events.WikimediaEvent;
+import com.learn.wikimedialab.domain.entities.WikimediaEvent;
 import com.learn.wikimedialab.mongodb.entities.WikimediaEventEntity;
 import java.time.Instant;
 import java.time.OffsetDateTime;
