@@ -54,6 +54,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+      <dependency>
+        <artifactId>jjwt-api</artifactId>
+        <groupId>io.jsonwebtoken</groupId>
+        <version>0.11.5</version>
+      </dependency>
     </dependencies>
 
     <repositories>

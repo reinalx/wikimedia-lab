@@ -21,3 +21,6 @@ app:
   kafka:
     topics:
       filtered: wikimedia.filtered.events
+  auth:
+    secret:
+      key: 51256bb1n23ad0d2cedeb37ed948763ccb366af17b219f0bd99c9754288975f7

@@ -7,7 +7,9 @@ import lombok.Getter;
  */
 @Getter
 public enum ErrorCode {
-  EVENT_NOT_FOUND(1001, "Event not found");
+  EVENT_NOT_FOUND(1001, "Event not found"),
+  JWT_EXPIRED(1002, "JWT token has expired"),
+  ;
 
   private final int code;
 
