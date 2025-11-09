@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.domain.ports.in.services;
 
-import com.learn.wikimedialab.domain.entities.JwtInfo;
+import com.learn.wikimedialab.domain.entities.auth.JwtInfo;
 
 /**
  * Service interface for JWT operations.

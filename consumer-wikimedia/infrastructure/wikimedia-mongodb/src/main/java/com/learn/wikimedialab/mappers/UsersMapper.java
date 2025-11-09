@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.mappers;
 
-import com.learn.wikimedialab.domain.entities.User;
+import com.learn.wikimedialab.domain.entities.auth.User;
 import com.learn.wikimedialab.mongodb.entities.UserEntity;
 import org.mapstruct.Mapper;
 

@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.adapters;
 
-import com.learn.wikimedialab.domain.entities.User;
+import com.learn.wikimedialab.domain.entities.auth.User;
 import com.learn.wikimedialab.domain.ports.out.UsersPort;
 import com.learn.wikimedialab.mappers.UsersMapper;
 import com.learn.wikimedialab.mongodb.entities.UserEntity;

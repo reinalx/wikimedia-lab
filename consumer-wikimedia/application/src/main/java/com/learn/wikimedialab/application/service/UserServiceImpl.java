@@ -1,7 +1,7 @@
 package com.learn.wikimedialab.application.service;
 
-import com.learn.wikimedialab.domain.entities.JwtInfo;
-import com.learn.wikimedialab.domain.entities.User;
+import com.learn.wikimedialab.domain.entities.auth.JwtInfo;
+import com.learn.wikimedialab.domain.entities.auth.User;
 import com.learn.wikimedialab.domain.exceptions.PasswordMismatchingException;
 import com.learn.wikimedialab.domain.exceptions.UserNotFoundException;
 import com.learn.wikimedialab.domain.ports.in.services.JwtService;

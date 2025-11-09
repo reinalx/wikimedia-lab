@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.adapters;
 
-import com.learn.wikimedialab.domain.entities.EventAnalysis;
+import com.learn.wikimedialab.domain.entities.events.EventAnalysis;
 import com.learn.wikimedialab.domain.ports.out.EventAnalysisPort;
 import com.learn.wikimedialab.mappers.EventAnalysisMapper;
 import com.learn.wikimedialab.repositories.EventAnalysisRepository;

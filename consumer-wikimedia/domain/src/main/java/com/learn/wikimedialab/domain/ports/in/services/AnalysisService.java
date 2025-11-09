@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.domain.ports.in.services;
 
-import com.learn.wikimedialab.domain.entities.EventAnalysis;
+import com.learn.wikimedialab.domain.entities.events.EventAnalysis;
 
 /**
  * Service interface for analyzing Wikimedia events.

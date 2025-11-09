@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.mappers;
 
-import com.learn.wikimedialab.domain.entities.EventAnalysis;
+import com.learn.wikimedialab.domain.entities.events.EventAnalysis;
 import com.learn.wikimedialab.mongodb.entities.EventAnalysisEntity;
 import org.mapstruct.Mapper;
 

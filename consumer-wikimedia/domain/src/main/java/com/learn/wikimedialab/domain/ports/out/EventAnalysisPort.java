@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.domain.ports.out;
 
-import com.learn.wikimedialab.domain.entities.EventAnalysis;
+import com.learn.wikimedialab.domain.entities.events.EventAnalysis;
 
 /**
  * Port interface for analysis events operations.
