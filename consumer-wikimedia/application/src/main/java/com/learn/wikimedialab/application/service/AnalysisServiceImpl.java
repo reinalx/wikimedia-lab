@@ -1,13 +1,18 @@
 package com.learn.wikimedialab.application.service;
 
 import com.learn.wikimedialab.domain.entities.events.EventAnalysis;
+import com.learn.wikimedialab.domain.entities.outbox.Outbox;
 import com.learn.wikimedialab.domain.exceptions.EventNotFoundException;
 import com.learn.wikimedialab.domain.ports.in.services.AnalysisService;
 import com.learn.wikimedialab.domain.ports.out.EventAnalysisPort;
+import com.learn.wikimedialab.domain.ports.out.OutboxPort;
 import com.learn.wikimedialab.domain.ports.out.WikimediaEventsPort;
+import com.learn.wikimedialab.domain.values.OutboxEventType;
+import com.learn.wikimedialab.domain.values.OutboxStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of the AnalysisService interface.
@@ -19,6 +24,8 @@ public class AnalysisServiceImpl implements AnalysisService {
 
   private final EventAnalysisPort eventAnalysisPort;
 
+  private final OutboxPort outboxPort;
+
   private final WikimediaEventsPort wikimediaEventsPort;
 
   /**
@@ -27,11 +34,13 @@ public class AnalysisServiceImpl implements AnalysisService {
    * @param eventAnalysis The event analysis to be processed.
    */
   @Override
+  @Transactional
   public void analyzeEvent(EventAnalysis eventAnalysis) {
     log.info("Analyzing event: {}", eventAnalysis);
     this.validateEventAnalysis(eventAnalysis);
 
     this.eventAnalysisPort.publishAnalysisEvent(eventAnalysis);
+    this.outboxPort.saveEvent(this.createOutboxEvent(eventAnalysis));
     log.info("Event analysis published: {}", eventAnalysis);
   }
 
@@ -45,5 +54,21 @@ public class AnalysisServiceImpl implements AnalysisService {
     if (!this.wikimediaEventsPort.existsWikimediaEventById(eventAnalysis.eventId())) {
       throw new EventNotFoundException();
     }
+  }
+
+  /**
+   * Creates an outbox event for the given event analysis.
+   *
+   * @param eventAnalysis The event analysis for which to create the outbox event.
+   * @return The created outbox event.
+   */
+  private Outbox<EventAnalysis> createOutboxEvent(EventAnalysis eventAnalysis) {
+    return Outbox.<EventAnalysis>builder()
+        .aggregateId(eventAnalysis.id())
+        .aggregateType(eventAnalysis.getClass().getSimpleName())
+        .eventType(OutboxEventType.CREATE)
+        .payload(eventAnalysis)
+        .status(OutboxStatus.PENDING)
+        .build();
   }
 }
