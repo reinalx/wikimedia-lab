@@ -1,7 +1,7 @@
 package com.learn.wikimedialab.kafka.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learn.wikimedialab.domain.entities.events.WikimediaEvent;
+import com.learn.wikimedialab.domain.entities.WikimediaEvent;
 import java.io.IOException;
 import org.springframework.stereotype.Component;
 
@@ -33,20 +33,6 @@ public class JsonToObjectMapper {
       return this.objectMapper.readValue(jsonString, WikimediaEvent.class);
     } catch (final IOException e) {
       throw new RuntimeException("Error deserializing JSON to WikimediaEvent", e);
-    }
-  }
-
-  /**
-   * Converts a WikimediaEvent object to a JSON string.
-   *
-   * @param event the WikimediaEvent object to convert
-   * @return the corresponding JSON string
-   */
-  public String convertEventToJsonString(WikimediaEvent event) {
-    try {
-      return this.objectMapper.writeValueAsString(event);
-    } catch (final IOException e) {
-      throw new RuntimeException("Error serializing WikimediaEvent to JSON", e);
     }
   }
 }

@@ -12,6 +12,9 @@ spring:
       uri: mongodb://root:example@localhost:27017/wikimedia?authSource=admin
   kafka:
     bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       group-id: wikimedia-consumer
       auto-offset-reset: latest
@@ -21,6 +24,7 @@ app:
   kafka:
     topics:
       filtered: wikimedia.filtered.events
+      analysis: wikimedia.analysis.events
   auth:
     secret:
       key: 51256bb1n23ad0d2cedeb37ed948763ccb366af17b219f0bd99c9754288975f7

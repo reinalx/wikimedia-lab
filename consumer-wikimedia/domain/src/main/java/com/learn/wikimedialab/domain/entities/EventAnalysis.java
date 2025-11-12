@@ -1,4 +1,4 @@
-package com.learn.wikimedialab.domain.entities.events;
+package com.learn.wikimedialab.domain.entities;
 
 import com.learn.wikimedialab.domain.values.SentimentType;
 import lombok.Builder;

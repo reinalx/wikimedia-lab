@@ -2,7 +2,7 @@ package com.learn.wikimedialab.apirest.mapper;
 
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events.model.GetWikimediaEventsResponseDTO;
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events.model.WikimediaEventDTO;
-import com.learn.wikimedialab.domain.entities.events.WikimediaEvent;
+import com.learn.wikimedialab.domain.entities.WikimediaEvent;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

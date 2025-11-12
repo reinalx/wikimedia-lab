@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.application.service;
 
-import com.learn.wikimedialab.domain.entities.events.EventAnalysis;
+import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.entities.outbox.Outbox;
 import com.learn.wikimedialab.domain.exceptions.EventNotFoundException;
 import com.learn.wikimedialab.domain.ports.in.services.AnalysisService;

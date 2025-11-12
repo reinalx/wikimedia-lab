@@ -1,7 +1,7 @@
 package com.learn.wikimedialab.apirest.mapper;
 
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.analysis.model.CreateEventAnalysisRequestDTO;
-import com.learn.wikimedialab.domain.entities.events.EventAnalysis;
+import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import org.mapstruct.Mapper;
 
 /**
