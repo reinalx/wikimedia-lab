@@ -1,5 +1,6 @@
 package com.learn.wikimedialab.domain.entities.outbox;
 
+import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.values.OutboxEventType;
 import com.learn.wikimedialab.domain.values.OutboxStatus;
 import lombok.Builder;
@@ -17,4 +18,12 @@ public record Outbox<T>(
     OutboxStatus status
 ) {
 
+  /**
+   * Checks if the payload is of type EventAnalysis.
+   *
+   * @return true if the payload is an instance of EventAnalysis, false otherwise.
+   */
+  public Boolean isPayloadEventAnalysis() {
+    return this.payload != null && this.aggregateType.equals(EventAnalysis.class.getSimpleName());
+  }
 }

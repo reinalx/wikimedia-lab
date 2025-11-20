@@ -6,6 +6,7 @@ import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.events.EventAnalysisCreated;
 import com.learn.wikimedialab.domain.ports.out.EventAnalysisPublisherPort;
 import com.learn.wikimedialab.kafka.mappers.KafkaEventAnalysisMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -24,13 +25,21 @@ public class KafkaEventAnalysisPublisher implements EventAnalysisPublisherPort {
 
   private final KafkaEventAnalysisMapper kafkaEventAnalysisMapper;
 
+  /**
+   * Publishes a list of event analyses to a Kafka topic.
+   *
+   * @param events The list of event analyses to be published.
+   */
   @Override
-  public void publishAnalysisEvent(EventAnalysis event) {
-    log.info("Publishing event analysis: {}", event);
-    final EventAnalysisCreated eventAnalysisCreated =
-        this.kafkaEventAnalysisMapper.toEventAnalysisCreated(event);
-    this.kafkaTemplate.send(WIKIMEDIA_EVENT_ANALYSIS_KAFKA_TOPIC,
-        eventAnalysisCreated.id(), eventAnalysisCreated);
-    log.info("Published event analysis to Kafka: {}", eventAnalysisCreated);
+  public void publishAnalysisEvent(List<EventAnalysis> events) {
+    log.info("Publishing event analysis to Kafka: {}", events);
+    final List<EventAnalysisCreated> eventAnalysisCreatedList = this.kafkaEventAnalysisMapper
+        .toEventAnalysisCreatedList(events);
+
+    eventAnalysisCreatedList.forEach(eventAnalysisCreated -> {
+      this.kafkaTemplate.send(WIKIMEDIA_EVENT_ANALYSIS_KAFKA_TOPIC,
+          eventAnalysisCreated.id(), eventAnalysisCreated);
+    });
+    log.info("Published event analysis to Kafka: {}", eventAnalysisCreatedList);
   }
 }

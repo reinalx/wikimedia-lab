@@ -1,6 +1,7 @@
 package com.learn.wikimedialab.domain.ports.out;
 
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
+import java.util.List;
 
 /**
  * Outbound port interface for publishing analysis events.
@@ -8,10 +9,10 @@ import com.learn.wikimedialab.domain.entities.EventAnalysis;
 public interface EventAnalysisPublisherPort {
 
   /**
-   * Publishes an analysis event.
+   * Publishes analysis events to an external system.
    *
-   * @param event The analysis event to be published.
+   * @param events The analysis events to be published.
    */
-  void publishAnalysisEvent(EventAnalysis event);
+  void publishAnalysisEvent(List<EventAnalysis> events);
 
 }

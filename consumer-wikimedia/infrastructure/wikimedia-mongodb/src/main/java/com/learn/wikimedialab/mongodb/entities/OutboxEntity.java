@@ -1,6 +1,7 @@
 package com.learn.wikimedialab.mongodb.entities;
 
 
+import com.learn.wikimedialab.domain.values.OutboxStatus;
 import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,10 +29,10 @@ public class OutboxEntity {
 
   private String eventType;
 
-  private String payload;
+  private Object payload;
 
   private OffsetDateTime createdAt;
-  
-  private String status;
+
+  private OutboxStatus status;
 
 }
