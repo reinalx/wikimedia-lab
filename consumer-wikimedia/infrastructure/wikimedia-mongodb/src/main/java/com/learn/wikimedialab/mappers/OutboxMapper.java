@@ -17,7 +17,6 @@ public interface OutboxMapper {
   /**
    * Maps a outbox object to its persistence entity representation.
    */
-  @Mapping(target = "createdAt", expression = "java(java.time.OffsetDateTime.now())")
   OutboxEntity toPersistence(Outbox<EventAnalysis> outbox);
 
   /**

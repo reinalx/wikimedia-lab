@@ -1,7 +1,5 @@
 package com.learn.wikimedialab.kafka.adapters.out;
 
-import static com.learn.wikimedialab.domain.utils.Constants.WIKIMEDIA_EVENT_ANALYSIS_KAFKA_TOPIC;
-
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.events.EventAnalysisCreated;
 import com.learn.wikimedialab.domain.ports.out.EventAnalysisPublisherPort;
@@ -10,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +25,9 @@ public class KafkaEventAnalysisPublisher implements EventAnalysisPublisherPort {
 
   private final KafkaEventAnalysisMapper kafkaEventAnalysisMapper;
 
+  @Value("${app.kafka.topics.analyzed}")
+  private String analyzedTopic;
+
   /**
    * Publishes a list of event analyses to a Kafka topic.
    *
@@ -39,7 +41,7 @@ public class KafkaEventAnalysisPublisher implements EventAnalysisPublisherPort {
 
     final List<EventAnalysisCreated> processedEvents = new ArrayList<>();
     eventAnalysisCreatedList.forEach(eventAnalysisCreated -> {
-      this.kafkaTemplate.send(WIKIMEDIA_EVENT_ANALYSIS_KAFKA_TOPIC,
+      this.kafkaTemplate.send(this.analyzedTopic,
               eventAnalysisCreated.id(), eventAnalysisCreated)
           .whenComplete((result, ex) -> {
             if (ex != null) {

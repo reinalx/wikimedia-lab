@@ -39,9 +39,10 @@ public class AnalysisServiceImpl implements AnalysisService {
     log.info("Analyzing event: {}", eventAnalysis);
     this.validateEventAnalysis(eventAnalysis);
 
-    this.eventAnalysisPort.publishAnalysisEvent(eventAnalysis);
-    this.outboxPort.saveEvent(this.createOutboxEvent(eventAnalysis));
-    log.info("Event analysis published: {}", eventAnalysis);
+    final EventAnalysis eventAnalysisCreated = this.eventAnalysisPort.publishAnalysisEvent(
+        eventAnalysis);
+    this.outboxPort.saveEvent(this.createOutboxEvent(eventAnalysisCreated));
+    log.info("Event analysis published: {}", eventAnalysisCreated);
   }
 
   /**
