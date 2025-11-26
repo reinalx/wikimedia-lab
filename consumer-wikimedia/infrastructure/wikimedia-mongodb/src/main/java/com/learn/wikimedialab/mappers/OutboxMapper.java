@@ -18,32 +18,17 @@ public interface OutboxMapper {
    * Maps a outbox object to its persistence entity representation.
    */
   @Mapping(target = "createdAt", expression = "java(java.time.OffsetDateTime.now())")
-  OutboxEntity toPersistence(Outbox<?> outbox);
-
+  OutboxEntity toPersistence(Outbox<EventAnalysis> outbox);
 
   /**
-   * Maps a list of OutboxEntity objects to a list of generic Outbox domain objects.
+   * Maps a list of OutboxEntity objects to their domain representation.
    */
-  default List<Outbox<?>> toDomainGenericList(List<OutboxEntity> entities) {
-    return entities.stream()
-        .map(outboxEntity -> {
-          if (EventAnalysis.class.getSimpleName().equals(outboxEntity.getAggregateType())) {
-            return this.toDomain(outboxEntity);
-          }
-          return this.toDomainGeneric(outboxEntity);
-        })
-        .toList();
-  }
+  List<Outbox<EventAnalysis>> toDomainList(List<OutboxEntity> entities);
 
   /**
    * Maps a OutboxEntity object to its domain representation.
    */
   @Mapping(target = "payload", source = "payload", qualifiedByName = "deserializePayloadToEventAnalysis")
   Outbox<EventAnalysis> toDomain(OutboxEntity entity);
-
-  /**
-   * Maps a OutboxEntity object to its generic domain representation.
-   */
-  Outbox<?> toDomainGeneric(OutboxEntity entity);
 
 }

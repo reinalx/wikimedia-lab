@@ -12,7 +12,8 @@ public interface EventAnalysisPublisherPort {
    * Publishes analysis events to an external system.
    *
    * @param events The analysis events to be published.
+   * @return A list of IDs of events that  to publish.
    */
-  void publishAnalysisEvent(List<EventAnalysis> events);
+  List<String> publishAnalysisEvent(List<EventAnalysis> events);
 
 }

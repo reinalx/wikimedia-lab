@@ -1,5 +1,6 @@
 package com.learn.wikimedialab.domain.ports.out;
 
+import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.entities.outbox.Outbox;
 import java.util.List;
 
@@ -13,11 +14,20 @@ public interface OutboxPort {
    *
    * @param event The outbox event to be saved.
    */
-  void saveEvent(Outbox<?> event);
+  void saveEvent(Outbox<EventAnalysis> event);
+
+  /**
+   * Updates the status of outbox events to PROCESSED.
+   *
+   * @param outboxes The list of outbox events to be updated.
+   */
+  void updateOutboxStatusToProcessed(List<Outbox<EventAnalysis>> outboxes);
+
 
   /**
    * Processes pending outbox events.
    */
-  List<Outbox<?>> fetchPendingEvents();
+  List<Outbox<EventAnalysis>> fetchPendingEvents();
+
 
 }
