@@ -1,16 +1,40 @@
-# Dockerfile simplificado para Apple Silicon/ARM64
+# Dockerfile optimizado usando Maven Wrapper (mvnw)
+# Asegura la misma versión de Maven en todos los builds
 FROM amazoncorretto:21-alpine-jdk AS build
 
 WORKDIR /app
 
-# Manually install Maven
-RUN apk add --no-cache maven
+# Copy Maven Wrapper files first (ensures version consistency)
+COPY mvnw .
+COPY .mvn .mvn
 
-# Copy source code
-COPY . .
+# Make Maven Wrapper executable
+RUN chmod +x mvnw
 
-# Build the application
-RUN mvn clean package -DskipTests
+# Copy all POMs with proper directory structure
+COPY pom.xml .
+COPY api-rest/pom.xml api-rest/
+COPY application/pom.xml application/
+COPY boot/pom.xml boot/
+COPY domain/pom.xml domain/
+COPY infrastructure infrastructure/
+COPY jacoco-report-aggregate/pom.xml jacoco-report-aggregate/
+
+# Copy OpenAPI specs (required for code generation)
+COPY apis apis/
+
+# Download dependencies (cached layer if pom.xml doesn't change)
+RUN ./mvnw dependency:go-offline -B
+
+# Copy source code (infrastructure already copied)
+COPY api-rest/src api-rest/src
+COPY application/src application/src
+COPY boot/src boot/src
+COPY domain/src domain/src
+COPY src src
+
+# Build the application using Maven Wrapper
+RUN ./mvnw clean package -DskipTests
 
 # Runtime image
 FROM amazoncorretto:21-alpine

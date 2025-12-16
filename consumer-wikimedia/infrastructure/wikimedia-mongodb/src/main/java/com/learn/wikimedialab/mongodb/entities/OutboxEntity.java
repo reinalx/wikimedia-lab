@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Entity representing an outbox event for event sourcing.
  */
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "outbox")
