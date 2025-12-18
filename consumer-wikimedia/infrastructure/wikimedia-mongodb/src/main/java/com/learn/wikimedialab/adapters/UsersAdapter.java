@@ -29,9 +29,6 @@ public class UsersAdapter implements UsersPort {
         .orElse(null);
   }
 
-  /**
-   * Initializes the adapter by logging the number of users in the repository.
-   */
   @Override
   public void createIfNotExist(User user) {
     final UserEntity userEntity = this.usersMapper.toEntity(user);
