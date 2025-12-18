@@ -24,9 +24,6 @@ public class OutboxServiceImpl implements OutboxService {
 
   private final EventAnalysisPublisherPort eventAnalysisPublisherPort;
 
-  /**
-   * Processes pending outbox events.
-   */
   @Override
   public void processPendingEvents() {
     log.info("Processing pending outbox events.");
@@ -38,12 +35,7 @@ public class OutboxServiceImpl implements OutboxService {
     log.info("Finished processing pending outbox events.");
   }
 
-  /**
-   * Publishes EventAnalysis objects extracted from Outbox events.
-   *
-   * @param outboxes The list of Outbox events.
-   * @return A list of Outbox events that were successfully published.
-   */
+
   private List<Outbox<EventAnalysis>> publishEventAnalyses(List<Outbox<EventAnalysis>> outboxes) {
     final List<String> publishedEventIds = this.eventAnalysisPublisherPort
         .publishAnalysisEvent(outboxes.stream()

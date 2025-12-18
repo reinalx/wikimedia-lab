@@ -28,11 +28,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
   private final WikimediaEventsPort wikimediaEventsPort;
 
-  /**
-   * Analyzes a Wikimedia event and stores the analysis result.
-   *
-   * @param eventAnalysis The event analysis to be processed.
-   */
+
   @Override
   @Transactional
   public void analyzeEvent(EventAnalysis eventAnalysis) {
@@ -45,24 +41,13 @@ public class AnalysisServiceImpl implements AnalysisService {
     log.info("Event analysis published: {}", eventAnalysisCreated);
   }
 
-  /**
-   * Validates the event analysis by checking if the associated Wikimedia event exists.
-   *
-   * @param eventAnalysis The event analysis to be validated.
-   * @throws EventNotFoundException if the associated Wikimedia event does not exist.
-   */
   private void validateEventAnalysis(EventAnalysis eventAnalysis) {
     if (!this.wikimediaEventsPort.existsWikimediaEventById(eventAnalysis.eventId())) {
       throw new EventNotFoundException();
     }
   }
 
-  /**
-   * Creates an outbox event for the given event analysis.
-   *
-   * @param eventAnalysis The event analysis for which to create the outbox event.
-   * @return The created outbox event.
-   */
+
   private Outbox<EventAnalysis> createOutboxEvent(EventAnalysis eventAnalysis) {
     return Outbox.<EventAnalysis>builder()
         .aggregateId(eventAnalysis.id())

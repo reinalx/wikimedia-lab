@@ -22,12 +22,5 @@ public interface JwtService {
    * @return The extracted JwtInfo.
    */
   JwtInfo getInfo(String token);
-
-  /**
-   * Checks if the provided JWT token is expired.
-   *
-   * @param token The JWT token.
-   * @return True if the token is expired, otherwise false.
-   */
-  Boolean isTokenExpired(String token);
+  
 }
