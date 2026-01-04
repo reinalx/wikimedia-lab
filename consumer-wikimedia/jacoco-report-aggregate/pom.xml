@@ -33,6 +33,7 @@
     </repositories>
 
     <dependencies>
+        <!-- Módulos del proyecto para incluir en el reporte agregado -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>consumer-wikimedia-api-rest</artifactId>
@@ -49,19 +50,19 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>wikimedia-kafka</artifactId>
-          <version>${project.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wikimedia-kafka</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>wikimedia-mongodb</artifactId>
-          <version>${project.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wikimedia-mongodb</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>wikimedia-scheduler</artifactId>
-          <version>${project.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wikimedia-scheduler</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -70,7 +71,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.12</version>
                 <executions>
                     <execution>
                         <id>report-aggregate</id>
@@ -78,12 +78,30 @@
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
+                        <configuration>
+                            <title>Consumer Wikimedia Coverage Report</title>
+                            <footer>Consumer Wikimedia</footer>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-aggregate</outputDirectory>
+                            <dataFileIncludes>
+                                <dataFileInclude>**/jacoco.exec</dataFileInclude>
+                            </dataFileIncludes>
+                            <!-- Exclusiones de clases de configuración, boot y mappers -->
+                            <excludes>
+                                <!-- Excluir clases de configuración -->
+                                <exclude>**/*Config.class</exclude>
+                                <exclude>**/*Configuration.class</exclude>
+                                
+                                <!-- Excluir clases de arranque/boot -->
+                                <exclude>**/*Application.class</exclude>
+                                <exclude>**/MainApplication.class</exclude>
+                                
+                                <!-- Excluir mappers (interfaces y implementaciones generadas) -->
+                                <exclude>**/*Mapper.class</exclude>
+                                <exclude>**/*MapperImpl.class</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <!-- Donde se genera el reporte HTML -->
-                    <outputDirectory>${project.build.directory}/site/jacoco-aggregate</outputDirectory>
-                </configuration>
             </plugin>
         </plugins>
     </build>
