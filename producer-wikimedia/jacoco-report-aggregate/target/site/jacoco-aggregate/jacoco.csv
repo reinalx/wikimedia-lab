@@ -3,4 +3,4 @@ jacoco-report-aggregate/producer-wikimedia-application,com.learn.wikimedialab.ap
 jacoco-report-aggregate/kafka-output,com.learn.wikimedialab.kafka.adapters,KafkaEventPublisherAdapterImpl,21,0,0,0,4,0,2,0,2,0
 jacoco-report-aggregate/kafka-output,com.learn.wikimedialab.config,KafkaProducerConfig,34,0,0,0,7,0,3,0,3,0
 jacoco-report-aggregate/wikimedia-webclient,com.learn.wikimedialab.webclient.adapters,WikimediaStreamingAdapterImpl.new ParameterizedTypeReference() {...},3,0,0,0,1,0,1,0,1,0
-jacoco-report-aggregate/wikimedia-webclient,com.learn.wikimedialab.webclient.adapters,WikimediaStreamingAdapterImpl,30,0,4,0,6,0,4,0,2,0
+jacoco-report-aggregate/wikimedia-webclient,com.learn.wikimedialab.webclient.adapters,WikimediaStreamingAdapterImpl,36,0,4,0,9,0,5,0,3,0

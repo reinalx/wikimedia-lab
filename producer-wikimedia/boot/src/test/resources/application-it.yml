@@ -1,0 +1,11 @@
+spring:
+  kafka:
+    producer:
+      retries: 0
+    consumer:
+      auto-offset-reset: earliest
+      group-id: wikimedia-consumer-it
+
+logging:
+  level:
+    org.springframework.kafka: DEBUG
