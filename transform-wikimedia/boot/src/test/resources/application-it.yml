@@ -1,0 +1,11 @@
+spring:
+  kafka:
+    consumer:
+      group-id: transform-it-consumer
+      auto-offset-reset: earliest
+
+app:
+  kafka:
+    topics:
+      raw: wikimedia.raw.events
+      filtered: wikimedia.filtered.events

@@ -5,6 +5,7 @@ import static com.learn.wikimedialab.domain.utils.Constants.SPANISH_WIKIPEDIA_DO
 import com.learn.wikimedialab.domain.adapters.EventPublisherAdapter;
 import com.learn.wikimedialab.domain.events.WikimediaEvent;
 import com.learn.wikimedialab.domain.services.WikimediaProcessorService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructo
+@RequiredArgsConstructor
 public class WikimediaProcessorServiceImpl implements WikimediaProcessorService {
 
   private final EventPublisherAdapter eventPublisherAdapter;
