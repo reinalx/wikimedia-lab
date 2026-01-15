@@ -1,4 +1,4 @@
-package com.learn.wikimedialab.config;
+package com.learn.wikimedia;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
