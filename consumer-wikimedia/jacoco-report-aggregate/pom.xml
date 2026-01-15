@@ -33,7 +33,6 @@
     </repositories>
 
     <dependencies>
-        <!-- Módulos del proyecto para incluir en el reporte agregado -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>consumer-wikimedia-api-rest</artifactId>
@@ -85,19 +84,18 @@
                             <dataFileIncludes>
                                 <dataFileInclude>**/jacoco.exec</dataFileInclude>
                             </dataFileIncludes>
-                            <!-- Exclusiones de clases de configuración, boot y mappers -->
                             <excludes>
-                                <!-- Excluir clases de configuración -->
                                 <exclude>**/*Config.class</exclude>
                                 <exclude>**/*Configuration.class</exclude>
-                                
-                                <!-- Excluir clases de arranque/boot -->
+
                                 <exclude>**/*Application.class</exclude>
                                 <exclude>**/MainApplication.class</exclude>
-                                
-                                <!-- Excluir mappers (interfaces y implementaciones generadas) -->
+
                                 <exclude>**/*Mapper.class</exclude>
                                 <exclude>**/*MapperImpl.class</exclude>
+
+                                <exclude>**/generated-sources/**</exclude>
+                                <exclude>**/openapi/**</exclude>
                             </excludes>
                         </configuration>
                     </execution>

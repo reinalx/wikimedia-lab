@@ -1,0 +1,19 @@
+server:
+  servlet:
+    context-path: /api/wikimedia-events
+
+spring:
+  kafka:
+    consumer:
+      group-id: wikimedia-consumer-it
+      auto-offset-reset: earliest
+
+app:
+  kafka:
+    topics:
+      filtered: wikimedia.filtered.events
+      analyzed: wikimedia.analysis.events
+
+  auth:
+    secret:
+      key: test-secret-key-test-secret-key-test-secret-key

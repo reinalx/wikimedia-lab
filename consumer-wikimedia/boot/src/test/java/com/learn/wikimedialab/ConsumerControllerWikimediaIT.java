@@ -3,16 +3,27 @@ package com.learn.wikimedialab;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.instancio.Select.field;
 
+import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.analysis.model.CreateEventAnalysisRequestDTO;
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events.model.GetWikimediaEventsResponseDTO;
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.users.model.LoginUserRequestDTO;
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.users.model.LoginUserResponseDTO;
 import com.learn.wikimedialab.domain.entities.WikimediaEvent;
+import com.learn.wikimedialab.domain.ports.out.OutboxPort;
+import com.learn.wikimedialab.domain.ports.out.WikimediaEventsPort;
+import com.learn.wikimedialab.domain.values.OutboxEventType;
+import com.learn.wikimedialab.domain.values.OutboxStatus;
+import com.learn.wikimedialab.mongodb.entities.EventAnalysisEntity;
+import com.learn.wikimedialab.mongodb.entities.OutboxEntity;
+import com.learn.wikimedialab.repositories.EventAnalysisRepository;
 import java.time.Duration;
+import java.util.List;
 import org.awaitility.Awaitility;
 import org.instancio.Instancio;
 import org.instancio.junit.InstancioExtension;
+import org.instancio.junit.InstancioSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +44,7 @@ import org.testcontainers.utility.TestcontainersConfiguration;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("it")
 @Import({TestcontainersConfiguration.class, InstancioExtension.class})
-public class ConsumerWikimediaIT {
+public class ConsumerControllerWikimediaIT {
 
   private static final String BASE = "/api/wikimedia-events";
 
@@ -45,6 +56,15 @@ public class ConsumerWikimediaIT {
 
   @Autowired
   MongoTemplate mongoTemplate;
+
+  @Autowired
+  WikimediaEventsPort wikimediaEventsPort;
+
+  @Autowired
+  OutboxPort outboxPort;
+
+  @Autowired
+  EventAnalysisRepository analysisRepository;
 
   @Value("${app.kafka.topics.filtered-events}")
   String filteredEventsTopic;
@@ -129,5 +149,58 @@ public class ConsumerWikimediaIT {
     return response.getBody().getToken();
   }
 
+  @ParameterizedTest
+  @InstancioSource(samples = 1)
+  void givenExistingEvent_whenCreateAnalysis_thenAnalysisAndOutboxArePersisted(String eventId) {
+
+    // Given
+    final WikimediaEvent event = this.persistEvent(eventId);
+    final CreateEventAnalysisRequestDTO request = new CreateEventAnalysisRequestDTO();
+    request.setEventId(event.id());
+    request.setAnalysis("This is an analysis");
+
+    final String token = this.loginAndGetToken();
+
+    // When
+    final HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(token);
+
+    final HttpEntity<CreateEventAnalysisRequestDTO> entity =
+        new HttpEntity<>(request, headers);
+
+    final ResponseEntity<Void> response =
+        this.restTemplate.postForEntity(
+            BASE + "/v1/analysis",
+            entity,
+            Void.class
+        );
+
+    // Then
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+    final List<EventAnalysisEntity> analyses = this.analysisRepository.findAll();
+    assertThat(analyses).hasSize(1);
+    assertThat(analyses.getFirst().getId()).isEqualTo(eventId);
+
+    final List<OutboxEntity> outboxes =
+        this.mongoTemplate.findAll(OutboxEntity.class);
+
+    assertThat(outboxes).hasSize(1);
+
+    final OutboxEntity outbox = outboxes.getFirst();
+    assertThat(outbox).extracting(OutboxEntity::getId, OutboxEntity::getStatus,
+            OutboxEntity::getEventType, OutboxEntity::getAggregateId)
+        .containsExactly(analyses.getFirst().getId(), OutboxStatus.PENDING,
+            OutboxEventType.CREATE.toString(), eventId);
+  }
+
+
+  private WikimediaEvent persistEvent(String eventId) {
+    final WikimediaEvent event = Instancio.create(WikimediaEvent.class).toBuilder()
+        .id(eventId)
+        .build();
+    this.wikimediaEventsPort.saveFilteredEvent(event);
+    return event;
+  }
 
 }
