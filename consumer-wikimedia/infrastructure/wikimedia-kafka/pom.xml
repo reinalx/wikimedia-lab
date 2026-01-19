@@ -67,14 +67,10 @@
       <version>${mapstruct.version}</version>
     </dependency>
 
+    <!-- Wikimedia Schemas - Repositorio central de esquemas Avro -->
     <dependency>
-      <groupId>io.confluent</groupId>
-      <artifactId>kafka-avro-serializer</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.avro</groupId>
-      <artifactId>avro</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>wikimedia-schemas</artifactId>
     </dependency>
 
 
@@ -102,23 +98,6 @@
             </path>
           </annotationProcessorPaths>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.avro</groupId>
-        <artifactId>avro-maven-plugin</artifactId>
-        <version>1.11.3</version>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>schema</goal>
-            </goals>
-            <configuration>
-              <sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
-              <outputDirectory>${project.basedir}/target/generated-sources/avro</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
 
     </plugins>

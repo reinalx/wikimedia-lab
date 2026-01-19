@@ -13,15 +13,17 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     properties:
-      schema.registry.url: http://schema-registry:8081
+      schema.registry.url: http://localhost:8085
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.KafkaAvroSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
     consumer:
       group-id: wikimedia-consumer
       auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.KafkaAvroSerializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
 app:
   kafka:
     topics:
