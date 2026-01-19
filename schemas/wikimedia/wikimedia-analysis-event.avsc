@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "WikimediaRawEvent",
+  "namespace": "com.example.wikimedia.avro",
+  "fields": [
+    { "name": "analysisId", "type": "string" },
+    { "name": "eventId", "type": "string" },
+    { "name": "analysis", "type": "string" },
+    { "name": "userId", "type": "string" },
+    { "name": "sentiment", "type": "string" },
+    { "name": "createdEventAt", "type": { "type": "long", "logicalType": "timestamp-millis" } }
+  ]
+}

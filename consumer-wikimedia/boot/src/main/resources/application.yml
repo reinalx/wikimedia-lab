@@ -12,14 +12,16 @@ spring:
       uri: mongodb://root:example@localhost:27017/wikimedia?authSource=admin
   kafka:
     bootstrap-servers: localhost:9092
+    properties:
+      schema.registry.url: http://schema-registry:8081
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.KafkaAvroSerializer
     consumer:
       group-id: wikimedia-consumer
       auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.KafkaAvroSerializer
 app:
   kafka:
     topics:
