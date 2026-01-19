@@ -60,7 +60,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.12</version>
                 <executions>
                     <execution>
                         <id>report-aggregate</id>
@@ -68,12 +67,27 @@
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
+                        <configuration>
+                            <title>Producer Wikimedia Coverage Report</title>
+                            <footer>Producer Wikimedia</footer>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-aggregate</outputDirectory>
+                            <dataFileIncludes>
+                                <dataFileInclude>**/jacoco.exec</dataFileInclude>
+                            </dataFileIncludes>
+                            <excludes>
+                                <exclude>**/*Config.class</exclude>
+                                <exclude>**/*Configuration.class</exclude>
+
+                                <exclude>**/*Application.class</exclude>
+                                <exclude>**/MainApplication.class</exclude>
+
+                                <exclude>**/*Mapper.class</exclude>
+                                <exclude>**/*MapperImpl.class</exclude>
+
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <!-- Donde se genera el reporte HTML -->
-                    <outputDirectory>${project.build.directory}/site/jacoco-aggregate</outputDirectory>
-                </configuration>
             </plugin>
         </plugins>
     </build>

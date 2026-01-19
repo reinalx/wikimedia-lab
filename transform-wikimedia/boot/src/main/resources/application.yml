@@ -4,7 +4,7 @@ server:
 
 spring:
   application:
-    name: template
+    name: transform-wikimedia
   kafka:
     bootstrap-servers: localhost:9092
     consumer:

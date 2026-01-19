@@ -3,6 +3,7 @@ package com.learn.wikimedialab.adapters;
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.ports.out.EventAnalysisPort;
 import com.learn.wikimedialab.mappers.EventAnalysisMapper;
+import com.learn.wikimedialab.mongodb.entities.EventAnalysisEntity;
 import com.learn.wikimedialab.repositories.EventAnalysisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +27,10 @@ public class EventAnalysisAdapter implements EventAnalysisPort {
    * @param eventAnalysis The event analysis to be published.
    */
   @Override
-  public void publishAnalysisEvent(EventAnalysis eventAnalysis) {
-    this.eventAnalysisRepository.save(
+  public EventAnalysis publishAnalysisEvent(EventAnalysis eventAnalysis) {
+    final EventAnalysisEntity eventAnalysisEntity = this.eventAnalysisRepository.save(
         this.eventAnalysisMapper.toEntity(eventAnalysis)
     );
+    return eventAnalysis.toBuilder().id(eventAnalysisEntity.getId()).build();
   }
 }

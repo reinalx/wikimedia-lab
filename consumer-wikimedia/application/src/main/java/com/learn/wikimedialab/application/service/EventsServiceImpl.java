@@ -29,13 +29,7 @@ public class EventsServiceImpl implements EventsService {
     log.info("Event saved to database: {}", event);
   }
 
-  /**
-   * Retrieves a list of Wikimedia events with pagination.
-   *
-   * @param page The page number.
-   * @param size The number of events per page.
-   * @return A list of Wikimedia events.
-   */
+
   @Override
   public List<WikimediaEvent> getWikimediaEvents(int page, int size) {
     log.info("Retrieving Wikimedia events - Page: {}, Size: {}", page, size);

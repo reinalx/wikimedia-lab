@@ -12,6 +12,6 @@ public interface EventAnalysisPort {
    *
    * @param eventAnalysis The event analysis to be published.
    */
-  void publishAnalysisEvent(EventAnalysis eventAnalysis);
+  EventAnalysis publishAnalysisEvent(EventAnalysis eventAnalysis);
 
 }

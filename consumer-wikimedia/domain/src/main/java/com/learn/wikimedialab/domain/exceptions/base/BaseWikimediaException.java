@@ -17,6 +17,11 @@ public class BaseWikimediaException extends RuntimeException {
 
   private final String description;
 
+  /**
+   * Constructs a new BaseWikimediaException with the specified error code.
+   *
+   * @param errorCode The error code associated with the exception.
+   */
   public BaseWikimediaException(ErrorCode errorCode) {
     this.code = String.valueOf(errorCode.getCode());
     this.description = errorCode.getMessage();

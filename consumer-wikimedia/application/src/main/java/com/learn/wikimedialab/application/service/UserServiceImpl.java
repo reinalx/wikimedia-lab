@@ -1,7 +1,7 @@
 package com.learn.wikimedialab.application.service;
 
-import com.learn.wikimedialab.domain.entities.JwtInfo;
-import com.learn.wikimedialab.domain.entities.User;
+import com.learn.wikimedialab.domain.entities.auth.JwtInfo;
+import com.learn.wikimedialab.domain.entities.auth.User;
 import com.learn.wikimedialab.domain.exceptions.PasswordMismatchingException;
 import com.learn.wikimedialab.domain.exceptions.UserNotFoundException;
 import com.learn.wikimedialab.domain.ports.in.services.JwtService;
@@ -11,7 +11,6 @@ import com.learn.wikimedialab.domain.values.RoleType;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,13 +28,6 @@ public class UserServiceImpl implements UsersService {
 
   private final PasswordEncoder passwordEncoder;
 
-  /**
-   * Logs in a user with the given username and password.
-   *
-   * @param username the username of the user
-   * @param password the password of the user
-   * @return a JWT token if login is successful
-   */
   @Override
   public String loginUser(String username, String password) {
     log.info("Attempting to log in user: {}", username);
@@ -45,13 +37,6 @@ public class UserServiceImpl implements UsersService {
     return this.generateTokenForUser(user);
   }
 
-  /**
-   * Retrieves a user by their username.
-   *
-   * @param username the username of the user
-   * @return the User entity
-   * @throws UserNotFoundException if the user is not found
-   */
   private User getUserByUsername(String username) {
     final User user = this.usersPort.findByUsername(username);
     if (user == null) {
@@ -61,25 +46,12 @@ public class UserServiceImpl implements UsersService {
     return user;
   }
 
-  /**
-   * Checks if the provided password matches the expected password.
-   *
-   * @param actualPassword   the actual password provided by the user
-   * @param expectedPassword the expected password stored in the system
-   * @throws BadCredentialsException if the passwords do not match
-   */
   private void checkMatchPassword(String actualPassword, String expectedPassword) {
     if (!this.passwordEncoder.matches(actualPassword, expectedPassword)) {
       throw new PasswordMismatchingException();
     }
   }
 
-  /**
-   * Generates a JWT token for the given user.
-   *
-   * @param user the User entity
-   * @return a JWT token
-   */
   private String generateTokenForUser(User user) {
     return this.jwtService.generateToken(
         JwtInfo.builder()

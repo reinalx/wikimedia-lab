@@ -22,6 +22,7 @@ app:
   kafka:
     topics:
       filtered: ${APP_KAFKA_TOPICS_FILTERED}
+      analyzed: ${APP_KAFKA_TOPICS_ANALYZED}
 
 management:
   endpoints:

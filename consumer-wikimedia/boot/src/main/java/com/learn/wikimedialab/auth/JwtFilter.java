@@ -26,10 +26,9 @@ public class JwtFilter extends OncePerRequestFilter {
    *
    * @param request the HTTP request
    * @return true if the filter should not be applied, false otherwise
-   * @throws ServletException if a servlet error occurs
    */
   @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+  protected boolean shouldNotFilter(HttpServletRequest request) {
     final String path = request.getServletPath();
     return path.startsWith("/assets/") || path.startsWith("/images/") || path.startsWith(
         "/static/");

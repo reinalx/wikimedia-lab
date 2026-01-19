@@ -69,7 +69,8 @@ services:
       sleep 10;
       kafka-topics --create --topic wikimedia.raw.events --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1;
       kafka-topics --create --topic wikimedia.filtered.events --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1;
-      echo 'Tópicos creados: wikimedia.raw.events y wikimedia.filtered.events';
+      kafka-topics --create --topic wikimedia.analysis.events --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1;
+      echo 'Tópicos creados: wikimedia.raw.events, wikimedia.filtered.events y wikimedia.analysis.events';
       "
 
   # --- PRODUCER WIKIMEDIA SERVICE ---
@@ -143,6 +144,7 @@ services:
       SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: latest
       SPRING_DATA_MONGODB_URI: mongodb://root:example@mongodb:27017/wikimedia?authSource=admin
       APP_KAFKA_TOPICS_FILTERED: wikimedia.filtered.events
+      APP_KAFKA_TOPICS_ANALYZED: wikimedia.analysis.events
       SERVER_SERVLET_CONTEXT_PATH: /api/wikimedia-events
       JAVA_OPTS: "-Xmx512m -Xms256m"
     depends_on:

@@ -2,10 +2,12 @@ package com.learn.wikimedialab.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.OffsetDateTime;
+import lombok.Builder;
 
 /**
  * Record representing a Wikimedia event.
  */
+@Builder(toBuilder = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record WikimediaEvent(
     String id,

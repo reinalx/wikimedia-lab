@@ -1,43 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>StreamingProcessingServiceImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">jacoco-report-aggregate</a> &gt; <a href="../index.html" class="el_bundle">producer-wikimedia-application</a> &gt; <a href="index.source.html" class="el_package">com.learn.wikimedialab.application.service</a> &gt; <span class="el_source">StreamingProcessingServiceImpl.java</span></div><h1>StreamingProcessingServiceImpl.java</h1><pre class="source lang-java linenums">package com.learn.wikimedialab.application.service;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>StreamingProcessingServiceImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Producer Wikimedia Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">producer-wikimedia-application</a> &gt; <a href="index.source.html" class="el_package">com.learn.wikimedialab.application.service</a> &gt; <span class="el_source">StreamingProcessingServiceImpl.java</span></div><h1>StreamingProcessingServiceImpl.java</h1><pre class="source lang-java linenums">package com.learn.wikimedialab.application.service;
 
-import static com.learn.wikimedialab.domain.events.Topics.WIKIMEDIA_LAB_EVENTS_TOPIC;
-
+import com.learn.wikimedialab.domain.adapters.EventPublisherAdapter;
+import com.learn.wikimedialab.domain.adapters.StreamingClientAdapter;
 import com.learn.wikimedialab.domain.services.StreamingProcessingService;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 
 /**
  * Service for processing streaming data from Wikimedia Lab and sending it to Kafka.
  */
-<span class="nc" id="L17">@Slf4j</span>
+<span class="fc" id="L13">@Slf4j</span>
 @Service
 @RequiredArgsConstructor
 public class StreamingProcessingServiceImpl implements StreamingProcessingService {
 
-  private final WebClient webClient;
-  private final KafkaTemplate&lt;String, String&gt; kafkaTemplate;
+  private final StreamingClientAdapter streamingClientAdapter;
+
+  private final EventPublisherAdapter eventPublisherAdapter;
 
   /**
-   * Starts streaming data from Wikimedia Lab and sends it to Kafka.
+   * Starts streaming events from Wikimedia and publishes them to Kafka.
    */
-  @PostConstruct
+  @Override
   public void startStreaming() {
-<span class="nc" id="L30">    final Flux&lt;String&gt; eventStream = this.webClient.get().retrieve().bodyToFlux(String.class);</span>
-
-<span class="nc" id="L32">    eventStream.filter(event -&gt; event.startsWith(&quot;data: &quot;)).map(event -&gt; event.substring(6))</span>
-<span class="nc" id="L33">        .subscribe(</span>
-            data -&gt; {
-<span class="nc" id="L35">              this.kafkaTemplate.send(WIKIMEDIA_LAB_EVENTS_TOPIC, data);</span>
-<span class="nc" id="L36">              log.info(&quot;📦 Evento publicado en Kafka: {}&quot;,</span>
-<span class="nc" id="L37">                  data.substring(0, Math.min(200, data.length())));</span>
-<span class="nc" id="L38">            },</span>
-<span class="nc" id="L39">            error -&gt; log.error(&quot;Streaming processing failed: {}&quot;, error.getMessage(), error),</span>
-<span class="nc" id="L40">            () -&gt; log.info(&quot;Stream ended&quot;));</span>
-<span class="nc" id="L41">  }</span>
+<span class="fc" id="L27">    this.streamingClientAdapter.streamEvents()</span>
+<span class="pc bpc" id="L28" title="1 of 4 branches missed.">        .filter(event -&gt; event != null &amp;&amp; event.trim().startsWith(&quot;{&quot;))</span>
+<span class="fc" id="L29">        .subscribe(</span>
+<span class="fc" id="L30">            this.eventPublisherAdapter::publishEvent,</span>
+<span class="nc" id="L31">            error -&gt; log.error(&quot;Error streaming events: {}&quot;, error.getMessage())</span>
+        );
+<span class="fc" id="L33">  }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>Producer Wikimedia</div></body></html>

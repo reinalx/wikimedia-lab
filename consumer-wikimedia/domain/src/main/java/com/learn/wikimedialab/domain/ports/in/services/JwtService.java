@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.domain.ports.in.services;
 
-import com.learn.wikimedialab.domain.entities.JwtInfo;
+import com.learn.wikimedialab.domain.entities.auth.JwtInfo;
 
 /**
  * Service interface for JWT operations.
@@ -22,12 +22,5 @@ public interface JwtService {
    * @return The extracted JwtInfo.
    */
   JwtInfo getInfo(String token);
-
-  /**
-   * Checks if the provided JWT token is expired.
-   *
-   * @param token The JWT token.
-   * @return True if the token is expired, otherwise false.
-   */
-  Boolean isTokenExpired(String token);
+  
 }

@@ -1,1 +1,2 @@
 com/learn/wikimedialab/config/KafkaProducerConfig.class
+com/learn/wikimedialab/kafka/adapters/KafkaEventPublisherAdapterImpl.class

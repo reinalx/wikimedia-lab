@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.domain.ports.out;
 
-import com.learn.wikimedialab.domain.entities.User;
+import com.learn.wikimedialab.domain.entities.auth.User;
 
 /**
  * Port interface for user-related operations.

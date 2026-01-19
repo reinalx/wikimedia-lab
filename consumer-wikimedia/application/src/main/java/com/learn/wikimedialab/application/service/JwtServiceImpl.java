@@ -1,13 +1,14 @@
 package com.learn.wikimedialab.application.service;
 
-import com.learn.wikimedialab.domain.entities.JwtInfo;
+import com.learn.wikimedialab.domain.entities.auth.JwtInfo;
+import com.learn.wikimedialab.domain.exceptions.JwtExpiredException;
 import com.learn.wikimedialab.domain.ports.in.services.JwtService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
-import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,73 +42,26 @@ public class JwtServiceImpl implements JwtService {
         .compact();
   }
 
-  /**
-   * Extracts JWT information from the token.
-   *
-   * @param token The JWT token.
-   * @return The extracted JwtInfo.
-   */
   @Override
   public JwtInfo getInfo(final String token) {
-    final Claims claims =
-        Jwts.parserBuilder()
-            .setSigningKey(Keys.hmacShaKeyFor(this.secretKey.getBytes()))
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
+    try {
+      final Claims claims =
+          Jwts.parserBuilder()
+              .setSigningKey(Keys.hmacShaKeyFor(this.secretKey.getBytes()))
+              .build()
+              .parseClaimsJws(token)
+              .getBody();
 
-    return JwtInfo.builder()
-        .username(claims.getSubject())
-        .userId(claims.get("userId").toString())
-        .role(claims.get("role").toString())
-        .build();
+      return JwtInfo.builder()
+          .username(claims.getSubject())
+          .userId(claims.get("userId").toString())
+          .role(claims.get("role").toString())
+          .build();
+
+    } catch (final ExpiredJwtException expiredJwtException) {
+      log.error("JWT token is expired: {}", expiredJwtException.getMessage());
+      throw new JwtExpiredException();
+    }
   }
 
-  /**
-   * Checks if the JWT token is expired.
-   *
-   * @param token The JWT token.
-   * @return true if the token is expired, false otherwise.
-   */
-  @Override
-  public Boolean isTokenExpired(final String token) {
-    return this.extractExpiration(token).before(new Date());
-  }
-
-  /**
-   * Extracts the expiration date from the JWT token.
-   *
-   * @param token The JWT token.
-   * @return The expiration date.
-   */
-  private Date extractExpiration(final String token) {
-    return this.extractClaim(token, Claims::getExpiration);
-  }
-
-  /**
-   * Extracts a specific claim from the JWT token.
-   *
-   * @param token         The JWT token.
-   * @param claimResolver A function to extract the desired claim.
-   * @param <T>           The type of the claim.
-   * @return The extracted claim.
-   */
-  private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
-    final Claims claims = this.extractAllClaims(token);
-    return claimResolver.apply(claims);
-  }
-
-  /**
-   * Extracts all claims from the JWT token.
-   *
-   * @param token The JWT token.
-   * @return The claims contained in the token.
-   */
-  private Claims extractAllClaims(final String token) {
-    return Jwts
-        .parserBuilder()
-        .setSigningKey(Keys.hmacShaKeyFor(this.secretKey.getBytes()))
-        .build().parseClaimsJws(token)
-        .getBody();
-  }
 }

@@ -1,6 +1,6 @@
 package com.learn.wikimedialab.adapters;
 
-import com.learn.wikimedialab.domain.entities.User;
+import com.learn.wikimedialab.domain.entities.auth.User;
 import com.learn.wikimedialab.domain.ports.out.UsersPort;
 import com.learn.wikimedialab.mappers.UsersMapper;
 import com.learn.wikimedialab.mongodb.entities.UserEntity;
@@ -29,9 +29,6 @@ public class UsersAdapter implements UsersPort {
         .orElse(null);
   }
 
-  /**
-   * Initializes the adapter by logging the number of users in the repository.
-   */
   @Override
   public void createIfNotExist(User user) {
     final UserEntity userEntity = this.usersMapper.toEntity(user);

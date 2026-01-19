@@ -15,5 +15,5 @@
 
   <!-- Example: Suppress header check in package-info files -->
   <suppress checks="RegexpHeader" files="package-info.java"/>
-
+  <suppress checks="SummaryJavadoc"/>
 </suppressions>

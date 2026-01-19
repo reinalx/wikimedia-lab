@@ -1,2 +1,3 @@
-com/learn/wikimedialab/MainApplication.class
 com/learn/wikimedialab/config/WebClientConfig.class
+com/learn/wikimedialab/config/StartupRunner.class
+com/learn/wikimedialab/MainApplication.class

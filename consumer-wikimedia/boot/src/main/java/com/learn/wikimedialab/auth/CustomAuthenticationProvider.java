@@ -1,8 +1,7 @@
 package com.learn.wikimedialab.auth;
 
-import com.learn.wikimedialab.domain.entities.JwtInfo;
+import com.learn.wikimedialab.domain.entities.auth.JwtInfo;
 import com.learn.wikimedialab.domain.entities.auth.UserDetails;
-import com.learn.wikimedialab.domain.exceptions.JwtExpiredException;
 import com.learn.wikimedialab.domain.ports.in.services.JwtService;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,10 +25,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     final String token = (String) authentication.getCredentials();
-
-    if (this.jwtService.isTokenExpired(token)) {
-      throw new JwtExpiredException();
-    }
     final JwtInfo jwtInfo = this.jwtService.getInfo(token);
     final UserDetails userDetails = UserDetails.builder()
         .userId(jwtInfo.userId())

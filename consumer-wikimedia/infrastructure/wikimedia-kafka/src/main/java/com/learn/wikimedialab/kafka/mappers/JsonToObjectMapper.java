@@ -35,18 +35,4 @@ public class JsonToObjectMapper {
       throw new RuntimeException("Error deserializing JSON to WikimediaEvent", e);
     }
   }
-
-  /**
-   * Converts a WikimediaEvent object to a JSON string.
-   *
-   * @param event the WikimediaEvent object to convert
-   * @return the corresponding JSON string
-   */
-  public String convertEventToJsonString(WikimediaEvent event) {
-    try {
-      return this.objectMapper.writeValueAsString(event);
-    } catch (final IOException e) {
-      throw new RuntimeException("Error serializing WikimediaEvent to JSON", e);
-    }
-  }
 }
