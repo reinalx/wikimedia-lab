@@ -5,7 +5,8 @@ import static org.mockito.Mockito.when;
 
 import com.learn.wikimedialab.domain.entities.WikimediaEvent;
 import com.learn.wikimedialab.domain.ports.in.services.EventsService;
-import com.learn.wikimedialab.kafka.mappers.JsonToObjectMapper;
+import com.learn.wikimedialab.kafka.mappers.WikimediaFilteredEventMapper;
+import com.wikimedia.avro.WikimediaFilteredEvent;
 import org.instancio.junit.InstancioExtension;
 import org.instancio.junit.InstancioSource;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,13 +25,14 @@ class KafkaEventConsumerAdapterTest {
   private EventsService eventsService;
 
   @Mock
-  private JsonToObjectMapper jsonToObjectMapper;
+  private WikimediaFilteredEventMapper jsonToObjectMapper;
 
   @ParameterizedTest
   @InstancioSource(samples = 1)
-  void givenEvent_whenConsumeEvent_thenProcessEvent(String event, WikimediaEvent wikimediaEvent) {
+  void givenEvent_whenConsumeEvent_thenProcessEvent(WikimediaFilteredEvent event,
+      WikimediaEvent wikimediaEvent) {
     // When
-    when(this.jsonToObjectMapper.convertJsonStringToEvent(event))
+    when(this.jsonToObjectMapper.toWikimediaEvent(event))
         .thenReturn(wikimediaEvent);
 
     this.kafkaEventConsumerAdapter.consumer(event);
