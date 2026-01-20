@@ -5,7 +5,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.learn.wikimedialab.domain.events.WikimediaEvent;
-import com.learn.wikimedialab.kafka.mappers.JsonToObjectMapper;
+import com.learn.wikimedialab.kafka.mappers.WikimediaFilteredEventMapper;
+import com.wikimedia.avro.WikimediaFilteredEvent;
 import org.instancio.junit.InstancioExtension;
 import org.instancio.junit.InstancioSource;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,20 +23,24 @@ class KafkaEventPublisherAdapterTest {
   private KafkaEventPublisherAdapter kafkaEventPublisherAdapter;
 
   @Mock
-  private KafkaTemplate<String, String> kafkaTemplate;
+  private KafkaTemplate<String, WikimediaFilteredEvent> kafkaTemplate;
 
   @Mock
-  private JsonToObjectMapper jsonToObjectMapper;
+  private WikimediaFilteredEventMapper mapper;
 
   @ParameterizedTest
   @InstancioSource(samples = 1)
-  void givenEvent_whenPublish_thenPublishEvent(WikimediaEvent event, String rawEvent) {
+  void givenEvent_whenPublish_thenPublishEvent(
+      WikimediaEvent event,
+      WikimediaFilteredEvent filteredEvent) {
+    // Given
+    when(this.mapper.toWikimediaFilteredEvent(event)).thenReturn(filteredEvent);
+
     // When
-    when(this.jsonToObjectMapper.convertEventToJsonString(event)).thenReturn(rawEvent);
     this.kafkaEventPublisherAdapter.publish(event);
 
     // Then
-    verify(this.kafkaTemplate).send(WIKIMEDIA_FILTERED_KAFKA_TOPIC, rawEvent);
+    verify(this.kafkaTemplate).send(WIKIMEDIA_FILTERED_KAFKA_TOPIC, filteredEvent);
   }
 
 }

@@ -53,7 +53,7 @@
       <version>${mapstruct.version}</version>
     </dependency>
 
-    <!-- Wikimedia Schemas - Repositorio central de esquemas Avro -->
+    <!-- Wikimedia Schemas -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>wikimedia-schemas</artifactId>

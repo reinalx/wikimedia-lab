@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 Producer Wikimedia Coverage Report/producer-wikimedia-application,com.learn.wikimedialab.application.service,StreamingProcessingServiceImpl,36,0,4,0,7,0,6,0,4,0
+Producer Wikimedia Coverage Report/producer-wikimedia-domain,com.learn.wikimedialab.domain.exceptions,JsonToAvroMappingException,5,0,0,0,2,0,1,0,1,0
 Producer Wikimedia Coverage Report/kafka-output,com.learn.wikimedialab.kafka.adapters,KafkaEventPublisherAdapterImpl,56,0,0,0,11,0,2,0,2,0
-Producer Wikimedia Coverage Report/kafka-output,com.learn.wikimedialab.kafka.mappers,JsonToAvroMapper.JsonToAvroMappingException,5,0,0,0,2,0,1,0,1,0
 Producer Wikimedia Coverage Report/wikimedia-webclient,com.learn.wikimedialab.webclient.adapters,WikimediaStreamingAdapterImpl.new ParameterizedTypeReference() {...},3,0,0,0,1,0,1,0,1,0
 Producer Wikimedia Coverage Report/wikimedia-webclient,com.learn.wikimedialab.webclient.adapters,WikimediaStreamingAdapterImpl,36,0,4,0,9,0,5,0,3,0
