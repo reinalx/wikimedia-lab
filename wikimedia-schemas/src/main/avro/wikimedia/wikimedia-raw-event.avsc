@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "WikimediaRawEvent",
-  "namespace": "com.example.wikimedia.avro",
+  "namespace": "com.wikimedia.avro",
   "fields": [
     {
       "name": "schema",

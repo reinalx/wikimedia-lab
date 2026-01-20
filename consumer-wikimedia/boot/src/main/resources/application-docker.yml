@@ -16,7 +16,10 @@ spring:
       group-id: ${SPRING_KAFKA_CONSUMER_GROUP_ID}
       auto-offset-reset: ${SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    properties:
+      schema.registry.url: ${SPRING_KAFKA_PROPERTIES_SCHEMA_REGISTRY_URL:http://schema-registry:8081}
+      specific.avro.reader: true
 
 app:
   kafka:

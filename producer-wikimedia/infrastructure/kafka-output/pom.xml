@@ -26,10 +26,16 @@
             <artifactId>spring-kafka</artifactId>
         </dependency>
 
-        <!-- Wikimedia Schemas - Repositorio central de esquemas Avro -->
+        <!-- Wikimedia Schemas -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>wikimedia-schemas</artifactId>
+        </dependency>
+        
+        <!-- Jackson for JSON parsing -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
 
         <dependency>

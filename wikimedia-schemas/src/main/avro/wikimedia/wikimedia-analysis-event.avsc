@@ -1,7 +1,7 @@
 {
   "type": "record",
-  "name": "WikimediaRawEvent",
-  "namespace": "com.example.wikimedia.avro",
+  "name": "WikimediaAnalysisEvent",
+  "namespace": "com.wikimedia.avro",
   "fields": [
     { "name": "analysisId", "type": "string" },
     { "name": "eventId", "type": "string" },
