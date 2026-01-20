@@ -1,7 +1,7 @@
 package com.learn.wikimedialab.kafka.adapters.in;
 
 import com.learn.wikimedialab.domain.ports.in.services.EventsService;
-import com.learn.wikimedialab.kafka.mappers.WikimediaFilteredEventMapper;
+import com.learn.wikimedialab.kafka.mappers.KafkaEventsMapper;
 import com.wikimedia.avro.WikimediaFilteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class KafkaEventConsumerAdapter {
 
   private final EventsService wikimediaProcessorService;
 
-  private final WikimediaFilteredEventMapper mapper;
+  private final KafkaEventsMapper mapper;
 
   /**
    * Consumes an event from Kafka and processes it.

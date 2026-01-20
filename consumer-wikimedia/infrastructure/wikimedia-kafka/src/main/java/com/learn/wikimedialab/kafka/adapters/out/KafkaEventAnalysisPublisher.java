@@ -2,7 +2,7 @@ package com.learn.wikimedialab.kafka.adapters.out;
 
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.ports.out.EventAnalysisPublisherPort;
-import com.learn.wikimedialab.kafka.mappers.WikimediaAnalysisEventMapper;
+import com.learn.wikimedialab.kafka.mappers.KafkaEventsMapper;
 import com.wikimedia.avro.WikimediaAnalysisEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class KafkaEventAnalysisPublisher implements EventAnalysisPublisherPort {
 
   private final KafkaTemplate<String, WikimediaAnalysisEvent> kafkaTemplate;
 
-  private final WikimediaAnalysisEventMapper mapper;
+  private final KafkaEventsMapper mapper;
 
   @Value("${app.kafka.topics.analyzed}")
   private String analyzedTopic;

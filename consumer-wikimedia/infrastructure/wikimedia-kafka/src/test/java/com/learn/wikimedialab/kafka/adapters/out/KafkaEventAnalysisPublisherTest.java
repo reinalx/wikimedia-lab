@@ -7,7 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
-import com.learn.wikimedialab.kafka.mappers.WikimediaAnalysisEventMapper;
+import com.learn.wikimedialab.kafka.mappers.KafkaEventsMapper;
 import com.wikimedia.avro.WikimediaAnalysisEvent;
 import org.instancio.Instancio;
 import org.instancio.junit.InstancioExtension;
@@ -35,7 +35,7 @@ class KafkaEventAnalysisPublisherTest {
   private KafkaTemplate<String, WikimediaAnalysisEvent> kafkaTemplate;
 
   @Mock
-  private WikimediaAnalysisEventMapper mapper;
+  private KafkaEventsMapper mapper;
 
   @BeforeEach
   void setUp() throws Exception {
