@@ -6,6 +6,7 @@ import com.wikimedia.avro.WikimediaFilteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 
@@ -30,14 +31,11 @@ public class KafkaEventConsumerAdapter {
       topics = "${app.kafka.topics.filtered}",
       groupId = "${spring.kafka.consumer.group-id}"
   )
-  public void consumer(WikimediaFilteredEvent event) {
+  public void consumer(WikimediaFilteredEvent event, Acknowledgment ack) {
     log.info("Received event: {}", event);
-    try {
-      this.wikimediaProcessorService.processEvent(
-          this.mapper.toWikimediaEvent(event)
-      );
-    } catch (final Exception e) {
-      log.error("Error processing event: {}", e.getMessage());
-    }
+    this.wikimediaProcessorService.processEvent(
+        this.mapper.toWikimediaEvent(event)
+    );
+    ack.acknowledge();
   }
 }

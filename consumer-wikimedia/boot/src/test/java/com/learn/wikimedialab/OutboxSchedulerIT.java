@@ -6,7 +6,7 @@ import static org.instancio.Select.field;
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.entities.outbox.Outbox;
 import com.learn.wikimedialab.domain.ports.in.services.OutboxService;
-import com.learn.wikimedialab.domain.ports.out.OutboxPort;
+import com.learn.wikimedialab.domain.ports.out.idempotence.OutboxPort;
 import com.learn.wikimedialab.domain.values.OutboxEventType;
 import com.learn.wikimedialab.domain.values.OutboxStatus;
 import com.wikimedia.avro.WikimediaAnalysisEvent;

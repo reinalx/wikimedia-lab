@@ -5,13 +5,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.learn.wikimedialab.adapters.idempotence.OutboxAdapter;
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.entities.outbox.Outbox;
 import com.learn.wikimedialab.domain.values.OutboxStatus;
-import com.learn.wikimedialab.mappers.OutboxMapper;
-import com.learn.wikimedialab.mongodb.entities.OutboxEntity;
+import com.learn.wikimedialab.mappers.idempotence.OutboxMapper;
+import com.learn.wikimedialab.mongodb.entities.idempotence.OutboxEntity;
 import com.learn.wikimedialab.repositories.OutboxRepository;
-import java.util.List;
 import org.instancio.Instancio;
 import org.instancio.junit.InstancioExtension;
 import org.instancio.junit.InstancioSource;
@@ -21,6 +21,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 @ExtendWith({MockitoExtension.class, InstancioExtension.class})
 class OutboxAdapterTest {

@@ -3,15 +3,15 @@ package com.learn.wikimedialab.application.service;
 import com.learn.wikimedialab.domain.entities.WikimediaEvent;
 import com.learn.wikimedialab.domain.ports.in.services.EventsService;
 import com.learn.wikimedialab.domain.ports.out.WikimediaEventsPort;
-import java.util.List;
+import com.learn.wikimedialab.domain.ports.out.idempotence.InboxPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Implementation of the WikimediaEventsService interface.
- */
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional
@@ -20,9 +20,18 @@ public class EventsServiceImpl implements EventsService {
 
   private final WikimediaEventsPort wikimediaEventsAdapter;
 
+  private final InboxPort inboxPort;
+
   @Override
   public void processEvent(WikimediaEvent event) {
     log.info("Processing event for saving: {}", event);
+
+    try {
+      this.inboxPort.insertProcessedEvent(event.id());
+    } catch (final DuplicateKeyException e) {
+      log.warn("Event with ID {} has already been processed. Skipping.", event.id());
+      return;
+    }
 
     this.wikimediaEventsAdapter.saveFilteredEvent(event);
 

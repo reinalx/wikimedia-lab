@@ -8,15 +8,13 @@ import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.events.model.Ge
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.users.model.LoginUserRequestDTO;
 import com.learn.wikimedialab.apigenerator.openapi.api.wikimedia.users.model.LoginUserResponseDTO;
 import com.learn.wikimedialab.domain.entities.WikimediaEvent;
-import com.learn.wikimedialab.domain.ports.out.OutboxPort;
 import com.learn.wikimedialab.domain.ports.out.WikimediaEventsPort;
+import com.learn.wikimedialab.domain.ports.out.idempotence.OutboxPort;
 import com.learn.wikimedialab.domain.values.OutboxEventType;
 import com.learn.wikimedialab.domain.values.OutboxStatus;
 import com.learn.wikimedialab.mongodb.entities.EventAnalysisEntity;
-import com.learn.wikimedialab.mongodb.entities.OutboxEntity;
+import com.learn.wikimedialab.mongodb.entities.idempotence.OutboxEntity;
 import com.learn.wikimedialab.repositories.EventAnalysisRepository;
-import java.time.Duration;
-import java.util.List;
 import org.awaitility.Awaitility;
 import org.instancio.Instancio;
 import org.instancio.junit.InstancioExtension;
@@ -40,6 +38,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.utility.TestcontainersConfiguration;
+
+import java.time.Duration;
+import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("it")
