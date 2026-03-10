@@ -1,5 +1,7 @@
 package com.learn.wikimedialab.kafka.adapters.in;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -14,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.support.Acknowledgment;
 
 @ExtendWith({MockitoExtension.class, InstancioExtension.class})
 class KafkaEventConsumerAdapterTest {
@@ -31,13 +34,18 @@ class KafkaEventConsumerAdapterTest {
   @InstancioSource(samples = 1)
   void givenEvent_whenConsumeEvent_thenProcessEvent(WikimediaFilteredEvent event,
       WikimediaEvent wikimediaEvent) {
-    // When
+    // Given
+    final Acknowledgment ack = mock(Acknowledgment.class);
+
     when(this.mapper.toWikimediaEvent(event))
         .thenReturn(wikimediaEvent);
 
-    this.kafkaEventConsumerAdapter.consumer(event);
+    // When
+
+    this.kafkaEventConsumerAdapter.consumer(event, ack);
 
     // Then
     verify(this.eventsService).processEvent(wikimediaEvent);
+    verify(ack, times(1)).acknowledge();
   }
 }

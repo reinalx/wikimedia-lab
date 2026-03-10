@@ -9,9 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/**
- * Implementation of the WikimediaProcessorService interface.
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -19,11 +17,7 @@ public class WikimediaProcessorServiceImpl implements WikimediaProcessorService 
 
   private final EventPublisherAdapter eventPublisherAdapter;
 
-  /**
-   * Processes a Wikimedia event.
-   *
-   * @param event the Wikimedia event
-   */
+
   @Override
   public void processEvent(WikimediaEvent event) {
     if (!this.shouldBeForwarded(event)) {
@@ -36,12 +30,7 @@ public class WikimediaProcessorServiceImpl implements WikimediaProcessorService 
     log.info("Valid event sent: {}", event.user());
   }
 
-  /**
-   * Determines if the event should be forwarded based on specific criteria.
-   *
-   * @param event the Wikimedia event
-   * @return true if the event should be forwarded, false otherwise
-   */
+
   private boolean shouldBeForwarded(WikimediaEvent event) {
     if (event == null || event.meta() == null) {
       return false;

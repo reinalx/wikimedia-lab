@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -21,23 +22,16 @@ public class KafkaEventConsumerAdapter {
 
   private final WikimediaRawEventMapper mapper;
 
-  /**
-   * Consumes an event from Kafka and processes it.
-   *
-   * @param event the event data as a String
-   */
+
+  @Transactional
   @KafkaListener(
       topics = "${app.kafka.topics.raw}",
       groupId = "${spring.kafka.consumer.group-id}"
   )
   public void consumer(WikimediaRawEvent event) {
     log.info("Received event: {}", event);
-    try {
-      this.wikimediaProcessorService.processEvent(
-          this.mapper.toWikimediaEvent(event)
-      );
-    } catch (final Exception e) {
-      log.error("Error processing event: {}", e.getMessage());
-    }
+    this.wikimediaProcessorService.processEvent(
+        this.mapper.toWikimediaEvent(event)
+    );
   }
 }

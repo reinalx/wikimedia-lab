@@ -10,6 +10,7 @@ spring:
     properties:
       schema.registry.url: http://localhost:8085
     consumer:
+      enable-auto-commit: false
       group-id: wikimedia-processor
       auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -21,6 +22,7 @@ spring:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       acks: all
       retries: 2147483647
+      transaction-id-prefix: wikimedia-processor-tx-
       properties:
         enable.idempotence: true
         max.in.flight.requests.per.connection: 5

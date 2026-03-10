@@ -23,16 +23,11 @@ public class KafkaEventPublisherAdapter implements EventPublisherAdapter {
 
   private final WikimediaFilteredEventMapper mapper;
 
-  /**
-   * Publishes an event to Kafka.
-   *
-   * @param event the event data as a String
-   */
   @Override
   public void publish(WikimediaEvent event) {
     final WikimediaFilteredEvent wikimediaFilteredEvent = this.mapper.toWikimediaFilteredEvent(
         event);
-    this.kafkaTemplate.send(WIKIMEDIA_FILTERED_KAFKA_TOPIC, wikimediaFilteredEvent);
+    this.kafkaTemplate.send(WIKIMEDIA_FILTERED_KAFKA_TOPIC, event.id(), wikimediaFilteredEvent);
     log.info("Published event to Kafka: {}", event);
   }
 }

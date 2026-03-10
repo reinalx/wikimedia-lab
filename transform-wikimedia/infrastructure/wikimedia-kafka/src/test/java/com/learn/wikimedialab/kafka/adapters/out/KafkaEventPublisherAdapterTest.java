@@ -40,7 +40,7 @@ class KafkaEventPublisherAdapterTest {
     this.kafkaEventPublisherAdapter.publish(event);
 
     // Then
-    verify(this.kafkaTemplate).send(WIKIMEDIA_FILTERED_KAFKA_TOPIC, filteredEvent);
+    verify(this.kafkaTemplate).send(WIKIMEDIA_FILTERED_KAFKA_TOPIC, event.id(), filteredEvent);
   }
 
 }

@@ -1,7 +1,5 @@
 package com.learn.wikimedialab.kafka.adapters.in;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,20 +39,6 @@ class KafkaEventConsumerAdapterTest {
 
     // Then
     verify(this.wikimediaProcessorService).processEvent(wikimediaEvent);
-  }
-
-  @ParameterizedTest
-  @InstancioSource(samples = 1)
-  void givenError_whenConsumer_thenNotProcessEvent(WikimediaRawEvent event) {
-    // Given
-    when(this.mapper.toWikimediaEvent(event)).thenThrow(
-        new RuntimeException("Mapping error"));
-
-    // When
-    this.kafkaEventConsumerAdapter.consumer(event);
-
-    // Then
-    verify(this.wikimediaProcessorService, times(0)).processEvent(any());
   }
 
 }

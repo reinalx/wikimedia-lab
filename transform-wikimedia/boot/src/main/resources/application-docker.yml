@@ -8,6 +8,7 @@ spring:
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
     consumer:
+      enable-auto-commit: false
       group-id: ${SPRING_KAFKA_CONSUMER_GROUP_ID}
       auto-offset-reset: ${SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -17,6 +18,7 @@ spring:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       acks: all
       retries: 2147483647
+      transaction-id-prefix: wikimedia-processor-tx-
       properties:
         enable.idempotence: true
         max.in.flight.requests.per.connection: 5
