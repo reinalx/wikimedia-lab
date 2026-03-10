@@ -20,6 +20,15 @@ This project implements a real-time processing pipeline that consumes the public
                          │ (Kafka Topic) │    │ events        │    │               │
                          └───────────────┘    │ (Kafka Topic) │    └───────────────┘
                                               └───────────────┘
+
+                    ┌──────────────────────────────────────────────┐
+                    │          wikimedia-schemas (shared)          │
+                    │  Avro schemas: WikimediaRawEvent,            │
+                    │  WikimediaFilteredEvent, WikimediaAnalysis   │
+                    │  Used by all three services at build time    │
+                    └──────────────────────────────────────────────┘
+                                 ↑            ↑            ↑
+                              Producer   Transform     Consumer
 ```
 
 ## 📦 Components
@@ -34,6 +43,15 @@ This project implements a real-time processing pipeline that consumes the public
 - **Source Topic**: `wikimedia.raw.events`
 - **Target Topic**: `wikimedia.filtered.events`
 - **Applied Filters**: Only Spanish edits, exclude bots, etc.
+
+### 📐 Wikimedia Schemas (Shared Library)
+- **Artifact**: `com.learn:wikimedia-schemas:1.0.0-SNAPSHOT`
+- **Responsibility**: Central repository of Avro schemas used by all services
+- **Schemas**:
+  - `WikimediaRawEvent` — raw event from the Wikimedia stream
+  - `WikimediaFilteredEvent` — filtered event after processing
+  - `WikimediaAnalysisEvent` — aggregated analysis event
+- **Build note**: Each Dockerfile compiles and installs this library locally before building its service (not published to Maven Central)
 
 ### 💾 Consumer Wikimedia (Port 8090)
 - **Responsibility**: Persists filtered events to MongoDB and exposes REST API
@@ -305,6 +323,47 @@ docker exec producer-wikimedia ping kafka
 docker exec consumer-wikimedia ping mongodb
 ```
 
+### Avro Deserialization Errors
+
+**Symptom:**
+```
+MessageConversionException: Cannot convert from [java.lang.String]
+to [com.wikimedia.avro.WikimediaRawEvent]
+```
+
+**Cause:** The docker profile's `value-deserializer` is set to `StringDeserializer`
+instead of `KafkaAvroDeserializer`. The producer serializes events as Avro binary,
+so consumers must use the matching Avro deserializer.
+
+**Fix** in `application-docker.yml` for any consumer service:
+```yaml
+spring:
+  kafka:
+    consumer:
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
+```
+
+### wikimedia-schemas Build Failures
+
+**Symptom:**
+```
+Could not find artifact com.learn:wikimedia-schemas:jar:1.0.0-SNAPSHOT in central
+```
+
+**Cause:** `wikimedia-schemas` is a local library not published to Maven Central.
+Docker needs access to it at build time.
+
+**Fix:** The build context in `docker-compose.yml` must be `.` (root), not the
+service subdirectory. Each Dockerfile builds and installs `wikimedia-schemas`
+before building the service:
+```yaml
+build:
+  context: .
+  dockerfile: producer-wikimedia/Dockerfile
+```
+
 ### Apple Silicon (M1/M2/M3) Issues
 ```bash
 # Clean everything and start fresh
@@ -330,20 +389,26 @@ docker compose down --rmi local
 
 ```
 wikimedia-lab/
-├── docker-compose.yml              # Main orchestration file
+├── docker-compose.yml              # Main orchestration file (build context: root)
 ├── test-docker-pipeline.sh         # Automated test script
+├── wikimedia-schemas/              # Shared Avro schema library (build dependency)
+│   ├── pom.xml
+│   └── src/main/avro/wikimedia/
+│       ├── wikimedia-raw-event.avsc
+│       ├── wikimedia-filteredEvent.avsc
+│       └── wikimedia-analysis-event.avsc
 ├── producer-wikimedia/             # Wikimedia stream producer
-│   ├── Dockerfile
+│   ├── Dockerfile                  # Builds wikimedia-schemas first
 │   └── boot/src/main/resources/
 │       ├── application.yml         # Local config
 │       └── application-docker.yml  # Docker config
 ├── transform-wikimedia/            # Event transformation service
-│   ├── Dockerfile
+│   ├── Dockerfile                  # Builds wikimedia-schemas first
 │   └── boot/src/main/resources/
 │       ├── application.yml         # Local config
-│       └── application-docker.yml  # Docker config
+│       └── application-docker.yml  # Docker config (KafkaAvroDeserializer)
 └── consumer-wikimedia/             # MongoDB consumer + REST API
-    ├── Dockerfile
+    ├── Dockerfile                  # Builds wikimedia-schemas first
     └── boot/src/main/resources/
         ├── application.yml         # Local config
         └── application-docker.yml  # Docker config
@@ -357,6 +422,9 @@ wikimedia-lab/
 - ✅ **Docker compose health check timing** with realistic timeouts
 - ✅ **Service dependencies** ensuring proper startup sequence
 - ✅ **Apple Silicon compatibility** with ARM64-compatible base images
+- ✅ **wikimedia-schemas not found in Maven Central** — Docker build context changed to root (`.`) so each Dockerfile can compile and install the local `wikimedia-schemas` library before building the service
+- ✅ **Avro deserialization in transform-wikimedia (Docker profile)** — `value-deserializer` was incorrectly set to `StringDeserializer`; fixed to `KafkaAvroDeserializer` with `specific.avro.reader: true`
+- ✅ **Auth secret key missing in consumer Docker profile** — `app.auth.secret.key` added to `application-docker.yml`
 
 ### Configuration Improvements
 - ✅ **Separate Docker configurations** for each service
