@@ -43,5 +43,6 @@ logging:
   level:
     org.springframework.web.reactive: DEBUG
     reactor.netty: INFO
+    org.apache.kafka.clients.producer: INFO
     com.learn: DEBUG
     org.springframework.kafka: INFO

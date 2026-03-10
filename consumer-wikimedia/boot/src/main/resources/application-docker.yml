@@ -37,6 +37,9 @@ app:
     topics:
       filtered: ${APP_KAFKA_TOPICS_FILTERED}
       analyzed: ${APP_KAFKA_TOPICS_ANALYZED}
+  auth:
+    secret:
+      key: 51256bb1n23ad0d2cedeb37ed948763ccb366af17b219f0bd99c9754288975f7
 
 management:
   endpoints:
