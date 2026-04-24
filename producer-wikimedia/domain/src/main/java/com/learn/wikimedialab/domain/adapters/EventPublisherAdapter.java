@@ -8,7 +8,7 @@ public interface EventPublisherAdapter {
   /**
    * Publishes an event with the given data.
    *
-   * @param eventData the data of the event to be published
+   * @param eventData the data of the event to be published as JSON String
    */
   void publishEvent(String eventData);
 

@@ -1,10 +1,11 @@
 package com.learn.wikimedialab.repositories;
 
 import com.learn.wikimedialab.domain.values.OutboxStatus;
-import com.learn.wikimedialab.mongodb.entities.OutboxEntity;
-import java.util.List;
+import com.learn.wikimedialab.mongodb.entities.idempotence.OutboxEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Repository interface for managing OutboxEntity documents in MongoDB.

@@ -12,17 +12,34 @@ spring:
       uri: ${SPRING_DATA_MONGODB_URI}
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
+    listener:
+      ack-mode: manual
     consumer:
+      enable-auto-commit: false
       group-id: ${SPRING_KAFKA_CONSUMER_GROUP_ID}
       auto-offset-reset: ${SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    properties:
+      schema.registry.url: ${SPRING_KAFKA_PROPERTIES_SCHEMA_REGISTRY_URL:http://schema-registry:8081}
+      specific.avro.reader: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      acks: all
+      retries: 2147483647
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
 
 app:
   kafka:
     topics:
       filtered: ${APP_KAFKA_TOPICS_FILTERED}
       analyzed: ${APP_KAFKA_TOPICS_ANALYZED}
+  auth:
+    secret:
+      key: 51256bb1n23ad0d2cedeb37ed948763ccb366af17b219f0bd99c9754288975f7
 
 management:
   endpoints:

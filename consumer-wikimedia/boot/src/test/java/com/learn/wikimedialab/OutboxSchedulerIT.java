@@ -5,15 +5,11 @@ import static org.instancio.Select.field;
 
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.entities.outbox.Outbox;
-import com.learn.wikimedialab.domain.events.EventAnalysisCreated;
 import com.learn.wikimedialab.domain.ports.in.services.OutboxService;
-import com.learn.wikimedialab.domain.ports.out.OutboxPort;
+import com.learn.wikimedialab.domain.ports.out.idempotence.OutboxPort;
 import com.learn.wikimedialab.domain.values.OutboxEventType;
 import com.learn.wikimedialab.domain.values.OutboxStatus;
-import java.time.Duration;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import com.wikimedia.avro.WikimediaAnalysisEvent;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -31,6 +27,11 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.utility.TestcontainersConfiguration;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
 
 @SpringBootTest
 @ActiveProfiles("it")
@@ -69,7 +70,7 @@ class OutboxSchedulerIT {
     this.outboxService.processPendingEvents();
 
     // Then
-    final Consumer<String, EventAnalysisCreated> consumer =
+    final Consumer<String, WikimediaAnalysisEvent> consumer =
         this.createAnalysisConsumer(this.kafkaContainer.getBootstrapServers());
 
     consumer.subscribe(List.of("wikimedia.analysis.events"));
@@ -77,7 +78,7 @@ class OutboxSchedulerIT {
     Awaitility.await()
         .atMost(Duration.ofSeconds(10))
         .untilAsserted(() -> {
-          final ConsumerRecords<String, EventAnalysisCreated> records =
+          final ConsumerRecords<String, WikimediaAnalysisEvent> records =
               consumer.poll(Duration.ofMillis(500));
 
           assertThat(records.count()).isEqualTo(1);
@@ -86,7 +87,7 @@ class OutboxSchedulerIT {
     consumer.close();
   }
 
-  private Consumer<String, EventAnalysisCreated> createAnalysisConsumer(String bootstrapServers) {
+  private Consumer<String, WikimediaAnalysisEvent> createAnalysisConsumer(String bootstrapServers) {
 
     final Properties props = new Properties();
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);

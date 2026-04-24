@@ -1,18 +1,20 @@
-package com.learn.wikimedialab.mongodb.entities;
+package com.learn.wikimedialab.mongodb.entities.idempotence;
 
 
 import com.learn.wikimedialab.domain.values.OutboxStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Entity representing an outbox event for event sourcing.
  */
-@Data
+@Getter
+@Setter
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor

@@ -1,7 +1,8 @@
-package com.learn.wikimedialab.domain.ports.out;
+package com.learn.wikimedialab.domain.ports.out.idempotence;
 
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.entities.outbox.Outbox;
+
 import java.util.List;
 
 /**

@@ -5,33 +5,45 @@ FROM amazoncorretto:21-alpine-jdk AS build
 WORKDIR /app
 
 # Copy Maven Wrapper files first (ensures version consistency)
-COPY mvnw .
-COPY .mvn .mvn
+COPY consumer-wikimedia/mvnw .
+COPY consumer-wikimedia/.mvn .mvn
 
 # Make Maven Wrapper executable
 RUN chmod +x mvnw
 
+# Build and install wikimedia-schemas into local Maven repo
+# Use package (not install) to avoid the kafka-schema-registry plugin bound to install phase
+COPY wikimedia-schemas /wikimedia-schemas
+RUN ./mvnw -f /wikimedia-schemas/pom.xml package -DskipTests -B && \
+    ./mvnw install:install-file \
+        -Dfile=/wikimedia-schemas/target/wikimedia-schemas-1.0.0-SNAPSHOT.jar \
+        -DgroupId=com.learn \
+        -DartifactId=wikimedia-schemas \
+        -Dversion=1.0.0-SNAPSHOT \
+        -Dpackaging=jar \
+        -B
+
 # Copy all POMs with proper directory structure
-COPY pom.xml .
-COPY api-rest/pom.xml api-rest/
-COPY application/pom.xml application/
-COPY boot/pom.xml boot/
-COPY domain/pom.xml domain/
-COPY infrastructure infrastructure/
-COPY jacoco-report-aggregate/pom.xml jacoco-report-aggregate/
+COPY consumer-wikimedia/pom.xml .
+COPY consumer-wikimedia/api-rest/pom.xml api-rest/
+COPY consumer-wikimedia/application/pom.xml application/
+COPY consumer-wikimedia/boot/pom.xml boot/
+COPY consumer-wikimedia/domain/pom.xml domain/
+COPY consumer-wikimedia/infrastructure infrastructure/
+COPY consumer-wikimedia/jacoco-report-aggregate/pom.xml jacoco-report-aggregate/
 
 # Copy OpenAPI specs (required for code generation)
-COPY apis apis/
+COPY consumer-wikimedia/apis apis/
 
 # Download dependencies (cached layer if pom.xml doesn't change)
 RUN ./mvnw dependency:go-offline -B
 
 # Copy source code (infrastructure already copied)
-COPY api-rest/src api-rest/src
-COPY application/src application/src
-COPY boot/src boot/src
-COPY domain/src domain/src
-COPY src src
+COPY consumer-wikimedia/api-rest/src api-rest/src
+COPY consumer-wikimedia/application/src application/src
+COPY consumer-wikimedia/boot/src boot/src
+COPY consumer-wikimedia/domain/src domain/src
+COPY consumer-wikimedia/src src
 
 # Build the application using Maven Wrapper
 RUN ./mvnw clean package -DskipTests
@@ -40,9 +52,6 @@ RUN ./mvnw clean package -DskipTests
 FROM amazoncorretto:21-alpine
 
 WORKDIR /app
-
-# Install curl for health checks
-RUN apk add --no-cache curl
 
 # Create non-root user
 RUN addgroup -g 1001 -S appuser && \

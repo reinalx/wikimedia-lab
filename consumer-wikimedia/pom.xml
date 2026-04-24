@@ -37,6 +37,10 @@
 			<id>central</id>
 			<url>https://repo.maven.apache.org/maven2</url>
 		</repository>
+		<repository>
+			<id>confluent</id>
+			<url>https://packages.confluent.io/maven/</url>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -83,6 +87,11 @@
 				<groupId>${project.groupId}</groupId>
 				<artifactId>consumer-wikimedia-jacoco-report-aggregate</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>wikimedia-schemas</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>

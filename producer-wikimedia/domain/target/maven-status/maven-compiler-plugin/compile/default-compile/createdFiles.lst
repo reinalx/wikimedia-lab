@@ -1,3 +1,4 @@
+com/learn/wikimedialab/domain/exceptions/JsonToAvroMappingException.class
 com/learn/wikimedialab/domain/adapters/EventPublisherAdapter.class
 com/learn/wikimedialab/domain/adapters/StreamingClientAdapter.class
 com/learn/wikimedialab/domain/events/Topics.class

@@ -66,6 +66,14 @@
       <artifactId>mapstruct</artifactId>
       <version>${mapstruct.version}</version>
     </dependency>
+
+    <!-- Wikimedia Schemas -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>wikimedia-schemas</artifactId>
+    </dependency>
+
+
   </dependencies>
 
   <build>
@@ -91,6 +99,7 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 

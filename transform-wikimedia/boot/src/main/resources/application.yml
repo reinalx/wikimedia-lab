@@ -7,14 +7,25 @@ spring:
     name: transform-wikimedia
   kafka:
     bootstrap-servers: localhost:9092
+    properties:
+      schema.registry.url: http://localhost:8085
     consumer:
+      enable-auto-commit: false
       group-id: wikimedia-processor
       auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      acks: all
+      retries: 2147483647
+      transaction-id-prefix: wikimedia-processor-tx-
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
 app:
   kafka:
     topics:

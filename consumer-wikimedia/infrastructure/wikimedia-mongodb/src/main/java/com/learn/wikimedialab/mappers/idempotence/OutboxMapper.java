@@ -1,12 +1,13 @@
-package com.learn.wikimedialab.mappers;
+package com.learn.wikimedialab.mappers.idempotence;
 
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.entities.outbox.Outbox;
-import com.learn.wikimedialab.mongodb.entities.OutboxEntity;
+import com.learn.wikimedialab.mongodb.entities.idempotence.OutboxEntity;
 import com.learn.wikimedialab.utils.PayloadSerializer;
-import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 /**
  * Mapper interface for Outbox entities.

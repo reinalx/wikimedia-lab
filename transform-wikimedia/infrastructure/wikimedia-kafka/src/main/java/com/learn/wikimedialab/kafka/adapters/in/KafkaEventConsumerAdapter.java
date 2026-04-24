@@ -1,12 +1,13 @@
 package com.learn.wikimedialab.kafka.adapters.in;
 
-import com.learn.wikimedialab.domain.adapters.EventConsumerAdapter;
 import com.learn.wikimedialab.domain.services.WikimediaProcessorService;
-import com.learn.wikimedialab.kafka.mappers.JsonToObjectMapper;
+import com.learn.wikimedialab.kafka.mappers.WikimediaRawEventMapper;
+import com.wikimedia.avro.WikimediaRawEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -15,30 +16,22 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KafkaEventConsumerAdapter implements EventConsumerAdapter {
+public class KafkaEventConsumerAdapter {
 
   private final WikimediaProcessorService wikimediaProcessorService;
 
-  private final JsonToObjectMapper mapper;
+  private final WikimediaRawEventMapper mapper;
 
-  /**
-   * Consumes an event from Kafka and processes it.
-   *
-   * @param event the event data as a String
-   */
-  @Override
+
+  @Transactional
   @KafkaListener(
       topics = "${app.kafka.topics.raw}",
       groupId = "${spring.kafka.consumer.group-id}"
   )
-  public void consumer(String event) {
+  public void consumer(WikimediaRawEvent event) {
     log.info("Received event: {}", event);
-    try {
-      this.wikimediaProcessorService.processEvent(
-          this.mapper.convertJsonStringToEvent(event)
-      );
-    } catch (final Exception e) {
-      log.error("Error processing event: {}", e.getMessage());
-    }
+    this.wikimediaProcessorService.processEvent(
+        this.mapper.toWikimediaEvent(event)
+    );
   }
 }

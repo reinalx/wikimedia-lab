@@ -4,12 +4,13 @@ import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.entities.outbox.Outbox;
 import com.learn.wikimedialab.domain.ports.in.services.OutboxService;
 import com.learn.wikimedialab.domain.ports.out.EventAnalysisPublisherPort;
-import com.learn.wikimedialab.domain.ports.out.OutboxPort;
-import java.util.List;
+import com.learn.wikimedialab.domain.ports.out.idempotence.OutboxPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Implementation of the OutboxService interface.

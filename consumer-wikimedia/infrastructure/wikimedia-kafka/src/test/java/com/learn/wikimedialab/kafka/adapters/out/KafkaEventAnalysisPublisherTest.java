@@ -7,11 +7,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
-import com.learn.wikimedialab.domain.events.EventAnalysisCreated;
-import com.learn.wikimedialab.kafka.mappers.KafkaEventAnalysisMapper;
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import com.learn.wikimedialab.kafka.mappers.KafkaEventsMapper;
+import com.wikimedia.avro.WikimediaAnalysisEvent;
 import org.instancio.Instancio;
 import org.instancio.junit.InstancioExtension;
 import org.instancio.junit.InstancioSource;
@@ -24,6 +21,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 @ExtendWith({MockitoExtension.class, InstancioExtension.class})
 class KafkaEventAnalysisPublisherTest {
 
@@ -31,10 +32,10 @@ class KafkaEventAnalysisPublisherTest {
   private KafkaEventAnalysisPublisher kafkaEventAnalysisPublisher;
 
   @Mock
-  private KafkaTemplate<String, EventAnalysisCreated> kafkaTemplate;
+  private KafkaTemplate<String, WikimediaAnalysisEvent> kafkaTemplate;
 
   @Mock
-  private KafkaEventAnalysisMapper mapper;
+  private KafkaEventsMapper mapper;
 
   @BeforeEach
   void setUp() throws Exception {
@@ -48,18 +49,18 @@ class KafkaEventAnalysisPublisherTest {
   void givenEventAnalysisList_whenPublishAnalysisEvent_thenPublishToKafkaAndReturnIds(
       List<EventAnalysis> eventAnalysisList) {
     // Given
-    final List<EventAnalysisCreated> eventAnalysisCreatedList = Instancio.ofList(
-            EventAnalysisCreated.class)
+    final List<WikimediaAnalysisEvent> eventAnalysisCreatedList = Instancio.ofList(
+            WikimediaAnalysisEvent.class)
         .size(eventAnalysisList.size())
         .create();
 
-    final CompletableFuture<SendResult<String, EventAnalysisCreated>> future =
+    final CompletableFuture<SendResult<String, WikimediaAnalysisEvent>> future =
         CompletableFuture.completedFuture(null);
 
-    when(this.mapper.toEventAnalysisCreatedList(eventAnalysisList))
+    when(this.mapper.toWikimediaAnalysisEvent(eventAnalysisList))
         .thenReturn(eventAnalysisCreatedList);
     when(this.kafkaTemplate.send(eq("test-topic"), any(String.class),
-        any(EventAnalysisCreated.class)))
+        any(WikimediaAnalysisEvent.class)))
         .thenReturn(future);
 
     // When
@@ -67,14 +68,14 @@ class KafkaEventAnalysisPublisherTest {
         eventAnalysisList);
 
     // Then
-    verify(this.mapper).toEventAnalysisCreatedList(eventAnalysisList);
+    verify(this.mapper).toWikimediaAnalysisEvent(eventAnalysisList);
     eventAnalysisCreatedList.forEach(eventAnalysisCreated ->
-        verify(this.kafkaTemplate).send("test-topic", eventAnalysisCreated.id(),
+        verify(this.kafkaTemplate).send("test-topic", eventAnalysisCreated.getAnalysisId(),
             eventAnalysisCreated)
     );
 
     final List<String> expectedIds = eventAnalysisCreatedList.stream()
-        .map(EventAnalysisCreated::id)
+        .map(WikimediaAnalysisEvent::getAnalysisId)
         .toList();
     assertThat(result).containsExactlyInAnyOrderElementsOf(expectedIds);
   }

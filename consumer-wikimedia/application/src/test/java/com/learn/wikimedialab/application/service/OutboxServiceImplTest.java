@@ -8,8 +8,7 @@ import static org.mockito.Mockito.when;
 import com.learn.wikimedialab.domain.entities.EventAnalysis;
 import com.learn.wikimedialab.domain.entities.outbox.Outbox;
 import com.learn.wikimedialab.domain.ports.out.EventAnalysisPublisherPort;
-import com.learn.wikimedialab.domain.ports.out.OutboxPort;
-import java.util.List;
+import com.learn.wikimedialab.domain.ports.out.idempotence.OutboxPort;
 import org.instancio.junit.InstancioExtension;
 import org.instancio.junit.InstancioSource;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +17,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 @ExtendWith({MockitoExtension.class, InstancioExtension.class})
 class OutboxServiceImplTest {

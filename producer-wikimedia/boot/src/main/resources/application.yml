@@ -2,6 +2,7 @@ logging:
   level:
     org.springframework.web.reactive: DEBUG
     reactor.netty: INFO
+    org.apache.kafka.clients.producer: INFO
 
 server:
   address: 0.0.0.0
@@ -12,6 +13,17 @@ spring:
     name: producer-wikimedia-labs
   kafka:
     bootstrap-servers: localhost:9092
+    properties:
+      schema.registry.url: http://localhost:8085
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      acks: all
+      retries: 2147483647
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+
 
 wikimedia:
   stream:

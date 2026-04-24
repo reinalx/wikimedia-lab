@@ -53,6 +53,12 @@
       <version>${mapstruct.version}</version>
     </dependency>
 
+    <!-- Wikimedia Schemas -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>wikimedia-schemas</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>

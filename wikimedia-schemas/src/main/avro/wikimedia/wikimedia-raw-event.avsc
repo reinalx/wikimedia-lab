@@ -1,0 +1,52 @@
+{
+  "type": "record",
+  "name": "WikimediaRawEvent",
+  "namespace": "com.wikimedia.avro",
+  "fields": [
+    {
+      "name": "schema",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Original $schema field from Wikimedia"
+    },
+    {
+      "name": "meta",
+      "type": {
+        "type": "record",
+        "name": "Meta",
+        "fields": [
+          { "name": "uri", "type": "string" },
+          { "name": "requestId", "type": "string", "aliases": ["request_id"] },
+          { "name": "id", "type": "string" },
+          { "name": "domain", "type": "string" },
+          { "name": "stream", "type": "string" },
+          {
+            "name": "dt",
+            "type": {
+              "type": "long",
+              "logicalType": "timestamp-millis"
+            }
+          },
+          { "name": "topic", "type": "string" },
+          { "name": "partition", "type": "int" },
+          { "name": "offset", "type": "long" }
+        ]
+      }
+    },
+    { "name": "id", "type": "long" },
+    { "name": "type", "type": "string" },
+    { "name": "namespace", "type": "int" },
+    { "name": "title", "type": "string" },
+    { "name": "titleUrl", "type": "string", "aliases": ["title_url"] },
+    { "name": "comment", "type": ["null", "string"], "default": null },
+    { "name": "timestamp", "type": "long" },
+    { "name": "user", "type": "string" },
+    { "name": "bot", "type": "boolean" },
+    { "name": "notifyUrl", "type": ["null", "string"], "default": null, "aliases": ["notify_url"] },
+    { "name": "serverUrl", "type": "string", "aliases": ["server_url"] },
+    { "name": "serverName", "type": "string", "aliases": ["server_name"] },
+    { "name": "serverScriptPath", "type": "string", "aliases": ["server_script_path"] },
+    { "name": "wiki", "type": "string" },
+    { "name": "parsedComment", "type": ["null", "string"], "default": null, "aliases": ["parsedcomment"] }
+  ]
+}

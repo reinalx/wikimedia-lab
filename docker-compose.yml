@@ -29,6 +29,18 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
     volumes:
       - kafka-data:/var/lib/kafka/data
+  # --- SCHEMA REGISTRY ---
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.6.0
+    container_name: schema-registry
+    depends_on:
+      - kafka
+    ports:
+      - "8085:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:29092
 
   # --- MONGODB ---
   mongodb:
@@ -76,8 +88,8 @@ services:
   # --- PRODUCER WIKIMEDIA SERVICE ---
   producer-wikimedia:
     build:
-      context: ./producer-wikimedia
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: producer-wikimedia/Dockerfile
     container_name: producer-wikimedia
     ports:
       - "8081:8081"
@@ -94,7 +106,7 @@ services:
         condition: service_started
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8081/actuator/health"]
       interval: 20s
       timeout: 10s
       retries: 5
@@ -103,8 +115,8 @@ services:
   # --- TRANSFORM WIKIMEDIA SERVICE ---
   transform-wikimedia:
     build:
-      context: ./transform-wikimedia
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: transform-wikimedia/Dockerfile
     container_name: transform-wikimedia
     ports:
       - "8080:8080"
@@ -123,7 +135,7 @@ services:
         condition: service_started
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8080/actuator/health"]
       interval: 20s
       timeout: 10s
       retries: 5
@@ -132,8 +144,8 @@ services:
   # --- CONSUMER WIKIMEDIA SERVICE ---
   consumer-wikimedia:
     build:
-      context: ./consumer-wikimedia
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: consumer-wikimedia/Dockerfile
     container_name: consumer-wikimedia
     ports:
       - "8090:8090"
@@ -156,7 +168,7 @@ services:
         condition: service_started
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8090/api/wikimedia-events/actuator/health"]
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8090/api/wikimedia-events/actuator/health"]
       interval: 20s
       timeout: 10s
       retries: 5

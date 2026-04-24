@@ -1,5 +1,6 @@
 /Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/adapters/EventPublisherAdapter.java
 /Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/adapters/StreamingClientAdapter.java
 /Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/events/Topics.java
+/Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/exceptions/JsonToAvroMappingException.java
 /Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/services/StreamingProcessingService.java
 /Users/reinaldo/Desktop/learning/wikimedia-lab/producer-wikimedia/domain/src/main/java/com/learn/wikimedialab/domain/utils/Constants.java

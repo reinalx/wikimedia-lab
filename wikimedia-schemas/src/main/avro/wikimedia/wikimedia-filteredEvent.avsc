@@ -1,0 +1,26 @@
+{
+    "type": "record",
+    "name": "WikimediaFilteredEvent",
+    "namespace": "com.wikimedia.avro",
+    "fields": [
+        { "name": "id", "type": "string" },
+        { "name": "type", "type": "string" },
+        { "name": "user", "type": "string" },
+        { "name": "title", "type": "string" },
+        { "name": "titleUrl", "type": "string" },
+        { "name": "comment", "type": "string" },
+        { "name": "bot", "type": "boolean" },
+        {
+            "name": "meta",
+            "type": {
+                "type": "record",
+                "name": "MetaInfo",
+                "fields": [
+                    { "name": "domain", "type": "string" },
+                    { "name": "uri", "type": "string" },
+                    { "name": "dt", "type": "string" }
+                ]
+            }
+        }
+    ]
+}

@@ -1,2 +1,3 @@
 com/learn/wikimedialab/config/KafkaProducerConfig.class
 com/learn/wikimedialab/kafka/adapters/KafkaEventPublisherAdapterImpl.class
+com/learn/wikimedialab/kafka/mappers/JsonToAvroMapper.class

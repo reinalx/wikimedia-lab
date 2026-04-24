@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 /**
  * Service for processing streaming data from Wikimedia Lab and sending it to Kafka.
  */
-<span class="fc" id="L13">@Slf4j</span>
+<span class="nc" id="L13">@Slf4j</span>
 @Service
 @RequiredArgsConstructor
 public class StreamingProcessingServiceImpl implements StreamingProcessingService {
@@ -24,12 +24,12 @@ public class StreamingProcessingServiceImpl implements StreamingProcessingServic
    */
   @Override
   public void startStreaming() {
-<span class="fc" id="L27">    this.streamingClientAdapter.streamEvents()</span>
-<span class="pc bpc" id="L28" title="1 of 4 branches missed.">        .filter(event -&gt; event != null &amp;&amp; event.trim().startsWith(&quot;{&quot;))</span>
-<span class="fc" id="L29">        .subscribe(</span>
-<span class="fc" id="L30">            this.eventPublisherAdapter::publishEvent,</span>
+<span class="nc" id="L27">    this.streamingClientAdapter.streamEvents()</span>
+<span class="nc bnc" id="L28" title="All 4 branches missed.">        .filter(event -&gt; event != null &amp;&amp; event.trim().startsWith(&quot;{&quot;))</span>
+<span class="nc" id="L29">        .subscribe(</span>
+<span class="nc" id="L30">            this.eventPublisherAdapter::publishEvent,</span>
 <span class="nc" id="L31">            error -&gt; log.error(&quot;Error streaming events: {}&quot;, error.getMessage())</span>
         );
-<span class="fc" id="L33">  }</span>
+<span class="nc" id="L33">  }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span>Producer Wikimedia</div></body></html>
