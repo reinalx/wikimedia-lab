@@ -4,6 +4,7 @@ import com.learn.wikimedialab.domain.entities.WikimediaEvent;
 import com.learn.wikimedialab.domain.ports.in.services.EventsService;
 import com.learn.wikimedialab.domain.ports.out.WikimediaEventsPort;
 import com.learn.wikimedialab.domain.ports.out.idempotence.InboxPort;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -23,6 +24,7 @@ public class EventsServiceImpl implements EventsService {
   private final InboxPort inboxPort;
 
   @Override
+  @Retry(name = "mongoRetry")
   public void processEvent(WikimediaEvent event) {
     log.info("Processing event for saving: {}", event);
 

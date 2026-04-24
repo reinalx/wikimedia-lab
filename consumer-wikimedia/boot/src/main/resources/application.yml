@@ -32,11 +32,27 @@ spring:
       properties:
         enable.idempotence: true
         max.in.flight.requests.per.connection: 5
+resilience4j:
+  retry:
+    instances:
+      mongoRetry:
+        max-attempts: 3
+        wait-duration: 500ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - com.mongodb.MongoTimeoutException
+          - org.springframework.dao.DataAccessResourceFailureException
+          - com.mongodb.MongoSocketException
+        ignore-exceptions:
+          - org.springframework.dao.DuplicateKeyException
+          - java.lang.IllegalArgumentException
 app:
   kafka:
     topics:
       filtered: wikimedia.filtered.events
       analyzed: wikimedia.analysis.events
+      dql-filtered: wikimedia.filtered.events.dlq
   auth:
     secret:
       key: 51256bb1n23ad0d2cedeb37ed948763ccb366af17b219f0bd99c9754288975f7
